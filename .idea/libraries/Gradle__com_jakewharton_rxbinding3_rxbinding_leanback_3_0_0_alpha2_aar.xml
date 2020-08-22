@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jakewharton.rxbinding3:rxbinding-leanback:3.0.0-alpha2@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b6ce62dd56d30dfc3e25d4e5c67024d0/jetified-rxbinding-leanback-3.0.0-alpha2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b6ce62dd56d30dfc3e25d4e5c67024d0/jetified-rxbinding-leanback-3.0.0-alpha2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b6ce62dd56d30dfc3e25d4e5c67024d0/jetified-rxbinding-leanback-3.0.0-alpha2/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.rxbinding3/rxbinding-leanback/3.0.0-alpha2/1b83e694b647b73953e7311e44a38992d1a23e0a/rxbinding-leanback-3.0.0-alpha2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.rxbinding3/rxbinding-leanback/3.0.0-alpha2/82183987d76d518a408777695919748feb5c15b0/rxbinding-leanback-3.0.0-alpha2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

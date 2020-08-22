@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.xwray:groupie-kotlin-android-extensions:2.7.2@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/163663e25243af83fcbae9936db28341/jetified-groupie-kotlin-android-extensions-2.7.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/163663e25243af83fcbae9936db28341/jetified-groupie-kotlin-android-extensions-2.7.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/163663e25243af83fcbae9936db28341/jetified-groupie-kotlin-android-extensions-2.7.2/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.xwray/groupie-kotlin-android-extensions/2.7.2/272ca4fa8d33100eb3d4c70d9f1a0f44a521a5a3/groupie-kotlin-android-extensions-2.7.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.xwray/groupie-kotlin-android-extensions/2.7.2/29ce55de5b3fd145d5ef6c1f3d22fe6369cee9b4/groupie-kotlin-android-extensions-2.7.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
