@@ -1,8 +1,8 @@
-package com.example.navigationtest
+package com.example.baseproject
 
 import androidx.fragment.app.Fragment
-import com.example.navigationtest.screenone.FragmentOne
-import com.example.navigationtest.screentwo.FragmentTwo
+import com.example.baseproject.screenone.FragmentOne
+import com.example.baseproject.screentwo.FragmentTwo
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class FragmentOneScreen : SupportAppScreen() {

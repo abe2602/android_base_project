@@ -1,4 +1,4 @@
-package com.example.navigationtest
+package com.example.baseproject
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

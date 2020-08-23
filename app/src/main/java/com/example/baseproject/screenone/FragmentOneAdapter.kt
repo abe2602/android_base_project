@@ -1,9 +1,9 @@
-package com.example.navigationtest.screenone
+package com.example.baseproject.screenone
 
-import com.example.navigationtest.DisposableHolder
-import com.example.navigationtest.DisposableHolderDelegate
-import com.example.navigationtest.R
-import com.example.navigationtest.clicks
+import com.example.baseproject.DisposableHolder
+import com.example.baseproject.DisposableHolderDelegate
+import com.example.baseproject.R
+import com.example.baseproject.clicks
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item

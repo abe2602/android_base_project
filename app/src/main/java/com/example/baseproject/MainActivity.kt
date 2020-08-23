@@ -1,4 +1,4 @@
-package com.example.navigationtest
+package com.example.baseproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,7 +1,7 @@
-package com.example.navigationtest.screenone
+package com.example.baseproject.screenone
 
-import com.example.navigationtest.FlowContainerComponent
-import com.example.navigationtest.PerScreen
+import com.example.baseproject.FlowContainerComponent
+import com.example.baseproject.PerScreen
 import dagger.Component
 
 @PerScreen

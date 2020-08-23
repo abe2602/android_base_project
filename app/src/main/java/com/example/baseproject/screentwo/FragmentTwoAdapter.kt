@@ -1,4 +1,4 @@
-package com.example.navigationtest.screentwo
+package com.example.baseproject.screentwo
 
 import android.content.Context
 import com.xwray.groupie.GroupAdapter

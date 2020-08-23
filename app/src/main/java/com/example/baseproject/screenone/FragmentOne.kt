@@ -1,4 +1,4 @@
-package com.example.navigationtest.screenone
+package com.example.baseproject.screenone
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.navigationtest.*
+import com.example.baseproject.*
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.frament_one.*
 import ru.terrakok.cicerone.Cicerone

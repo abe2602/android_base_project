@@ -1,11 +1,11 @@
-package com.example.navigationtest.screentwo
+package com.example.baseproject.screentwo
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.navigationtest.*
+import com.example.baseproject.*
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_two.*

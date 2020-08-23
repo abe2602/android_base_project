@@ -1,4 +1,4 @@
-package com.example.navigationtest
+package com.example.baseproject
 
 import android.view.View
 import com.jakewharton.rxbinding3.view.clicks
