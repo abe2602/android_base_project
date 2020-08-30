@@ -1,17 +1,23 @@
 package com.example.baseproject.presentation.common
 
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
-import com.example.baseproject.presentation.pokemonlist.FragmentOne
+import com.example.baseproject.presentation.pokemonlist.PokemonListPresenter
 import com.example.baseproject.presentation.screentwo.FragmentTwo
+import kotlinx.android.parcel.Parcelize
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class FragmentOneScreen : SupportAppScreen() {
+sealed class Screen : SupportAppScreen(), Parcelable
+
+@Parcelize
+class PokemonListScreen : Screen() {
     override fun getFragment(): Fragment {
-        return FragmentOne.newInstance()
+        return PokemonListPresenter.newInstance()
     }
 }
 
-class FragmentTwoScreen : SupportAppScreen() {
+@Parcelize
+class FragmentTwoScreen : Screen() {
     override fun getFragment(): Fragment {
         return FragmentTwo.newInstance()
     }

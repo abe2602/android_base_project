@@ -74,7 +74,7 @@ class FragmentOneFlowContainer : FlowContainerFragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
-            cicerone.router.replaceScreen(FragmentOneScreen())
+            cicerone.router.replaceScreen(PokemonListScreen())
         }
     }
 }

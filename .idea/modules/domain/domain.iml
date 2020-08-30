@@ -79,8 +79,8 @@
     <orderEntry type="module-library">
       <library name="Gradle: kaptGeneratedClasses">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../domain/build/tmp/kapt3/classes/main" />
           <root url="file://$MODULE_DIR$/../../../domain/build/tmp/kapt3/classes/test" />
+          <root url="file://$MODULE_DIR$/../../../domain/build/tmp/kapt3/classes/main" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

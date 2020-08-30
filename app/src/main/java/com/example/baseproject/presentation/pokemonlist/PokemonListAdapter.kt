@@ -13,7 +13,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.my_item_layout.view.*
 
-class FragmentOneAdapter : GroupAdapter<GroupieViewHolder>() {
+class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
     private val onClickSubject: PublishSubject<Unit> = PublishSubject.create()
     val onClick: Observable<Unit> get() = onClickSubject
 
@@ -37,8 +37,8 @@ class FragmentOneAdapter : GroupAdapter<GroupieViewHolder>() {
         }
 
         override fun unbind(viewHolder: GroupieViewHolder) {
-            super.unbind(viewHolder)
             disposeAll()
+            super.unbind(viewHolder)
         }
     }
 }

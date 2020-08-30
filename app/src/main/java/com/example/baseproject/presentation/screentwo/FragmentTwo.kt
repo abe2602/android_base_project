@@ -10,7 +10,7 @@ import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
 import com.example.baseproject.presentation.common.BackButtonListener
 import com.example.baseproject.presentation.common.FlowContainerFragment
-import com.example.baseproject.presentation.common.FragmentOneScreen
+import com.example.baseproject.presentation.common.PokemonListScreen
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_two.*
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class FragmentTwo : Fragment(), DisposableHolder by DisposableHolderDelegate(), BackButtonListener {
 
     @Inject
-    lateinit var cicerone: Cicerone<Router>
+    lateinit var router: Router
 
     private val component: FragmentTwoComponent by lazy {
         DaggerFragmentTwoComponent
@@ -46,12 +46,12 @@ class FragmentTwo : Fragment(), DisposableHolder by DisposableHolderDelegate(), 
         super.onViewCreated(view, savedInstanceState)
 
         actionButton.clicks().doOnNext {
-            cicerone.router.navigateTo(FragmentOneScreen())
+            router.navigateTo(PokemonListScreen())
         }.subscribe().addTo(disposables)
     }
 
     override fun onBackPressed(): Boolean {
-        cicerone.router.exit()
+        router.exit()
         return true
     }
 
