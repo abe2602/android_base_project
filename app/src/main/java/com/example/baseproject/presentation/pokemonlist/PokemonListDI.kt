@@ -9,16 +9,16 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class PokemonListModule(private val fragmentActivity: FragmentActivity) {
+class PokemonListModule(private val pokemonListUI: PokemonListUi) {
     @Provides
-    fun getPokemonListView(activity: FragmentActivity): PokemonListUi = PokemonListView(activity)
-
-    @Provides
-    fun getFragmentActivity(): FragmentActivity = fragmentActivity
+    fun getPokemonListView(): PokemonListUi = pokemonListUI
 }
 
 @PerScreen
-@Component(modules = [PokemonListModule::class], dependencies = [FlowContainerComponent::class, ApplicationComponent::class])
+@Component(
+    modules = [PokemonListModule::class],
+    dependencies = [FlowContainerComponent::class, ApplicationComponent::class]
+)
 interface PokemonListComponent {
-    fun inject(pokemonListPresenter: PokemonListPresenter)
+    fun inject(pokemonListView: PokemonListView)
 }

@@ -7,6 +7,3 @@ annotation class PerFlow
 
 @Scope
 annotation class PerScreen
-
-@Scope
-annotation class PerActivity
