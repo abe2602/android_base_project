@@ -14,8 +14,8 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.my_item_layout.view.*
 
 class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
-    private val onClickSubject: PublishSubject<Unit> = PublishSubject.create()
-    val onClick: Observable<Unit> get() = onClickSubject
+    private val onChoosePokemonSubject: PublishSubject<String> = PublishSubject.create()
+    val onChoosePokemon: Observable<String> get() = onChoosePokemonSubject
 
     fun setData(pokemonList: List<Pokemon>) {
         pokemonList.forEach {
@@ -29,7 +29,7 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
         override fun bind(viewHolder: GroupieViewHolder, position: Int) {
             with(viewHolder.itemView) {
                 pokemonListLayout.clicks().doOnNext {
-                    onClickSubject.onNext(Unit)
+                    onChoosePokemonSubject.onNext(pokemon.name)
                 }.subscribe().addTo(disposables)
 
                 pokemonName.text = pokemon.name

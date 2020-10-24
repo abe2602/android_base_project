@@ -2,6 +2,7 @@ package com.example.baseproject.presentation.common
 
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import com.example.baseproject.presentation.pokemon_information.PokemonInformationView
 import com.example.baseproject.presentation.pokemonlist.PokemonListView
 import com.example.baseproject.presentation.screentwo.FragmentTwo
 import kotlinx.android.parcel.Parcelize
@@ -20,5 +21,12 @@ class PokemonListScreen : Screen() {
 class FragmentTwoScreen : Screen() {
     override fun getFragment(): Fragment {
         return FragmentTwo.newInstance()
+    }
+}
+
+@Parcelize
+class PokemonInformationScreen(private val pokemonName: String) : Screen() {
+    override fun getFragment(): Fragment {
+        return PokemonInformationView.newInstance(pokemonName)
     }
 }

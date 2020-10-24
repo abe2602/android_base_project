@@ -8,8 +8,7 @@ interface PokemonListUi : DisposableHolder {
 
     fun displayPokemonList(pokemonList: List<Pokemon>)
 
-    val onPokemonClick: Observable<Unit>
-    val onViewLoaded: Observable<Unit>
+    val onChoosePokemon: Observable<String>
     val onViewCreated: Observable<Unit>
 
 }

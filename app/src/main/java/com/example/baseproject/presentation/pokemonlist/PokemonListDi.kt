@@ -1,9 +1,8 @@
 package com.example.baseproject.presentation.pokemonlist
 
-import androidx.fragment.app.FragmentActivity
-import com.example.baseproject.presentation.common.FlowContainerComponent
 import com.example.baseproject.common.PerScreen
 import com.example.baseproject.presentation.common.ApplicationComponent
+import com.example.baseproject.presentation.common.FlowContainerComponent
 import dagger.Component
 import dagger.Module
 import dagger.Provides
