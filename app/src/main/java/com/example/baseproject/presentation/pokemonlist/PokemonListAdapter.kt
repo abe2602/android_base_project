@@ -37,8 +37,8 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
         }
 
         override fun unbind(viewHolder: GroupieViewHolder) {
-            disposeAll()
             super.unbind(viewHolder)
+            disposeAll()
         }
     }
 }

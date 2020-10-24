@@ -1,7 +1,6 @@
 package com.example.baseproject.presentation.pokemonlist
 
-import com.example.baseproject.common.DisposableHolder
-import com.example.baseproject.common.DisposableHolderDelegate
+import com.example.baseproject.presentation.common.scene.ScenePresenter
 import com.example.domain.usecase.GetPokemonListUC
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
@@ -9,15 +8,9 @@ import javax.inject.Inject
 class PokemonListPresenter @Inject constructor(
     private val pokemonListUi: PokemonListUi,
     private val getPokemonListUC: GetPokemonListUC
-) : DisposableHolder by DisposableHolderDelegate() {
+) : ScenePresenter(pokemonListUi) {
 
-    init {
-        pokemonListUi.onViewCreated.subscribe{
-            handleView()
-        }.addTo(pokemonListUi.disposables)
-    }
-
-    private fun handleView() {
+    override fun handleViews() {
         getPokemonListUC.getSingle(Unit).doOnSuccess {
             pokemonListUi.displayPokemonList(it)
         }.subscribe().addTo(pokemonListUi.disposables)

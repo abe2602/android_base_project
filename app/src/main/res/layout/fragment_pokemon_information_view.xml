@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.pokemon_information.PokemonInformationView">
+
+    <ImageView
+        android:id="@+id/frontImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:contentDescription="@string/pokemon_image_description"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
 
     <TextView
         android:id="@+id/pokemonInformationNameText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:hint="@string/pokemon_name_label" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/frontImage"
+        app:layout_constraintRight_toRightOf="@+id/frontImage"
+        app:layout_constraintLeft_toLeftOf="@+id/frontImage"
+        tools:text="@string/pokemon_name_label"
+        />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

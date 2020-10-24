@@ -5,31 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.R
-import com.example.baseproject.common.DisposableHolder
-import com.example.baseproject.common.DisposableHolderDelegate
-import com.example.baseproject.presentation.common.*
+import com.example.baseproject.presentation.common.FlowContainerFragment
+import com.example.baseproject.presentation.common.MainApplication
+import com.example.baseproject.presentation.common.PokemonInformationScreen
+import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.Pokemon
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frament_pokemon_list.*
-import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class PokemonListView : Fragment(), PokemonListUi, DisposableHolder by DisposableHolderDelegate(),
-    BackButtonListener {
+class PokemonListView : SceneView(), PokemonListUi {
 
     companion object {
         fun newInstance(): PokemonListView = PokemonListView()
     }
 
-    override val onViewCreated: PublishSubject<Unit> = PublishSubject.create<Unit>()
     override val onChoosePokemon: PublishSubject<String> = PublishSubject.create<String>()
-
-    @Inject
-    lateinit var router: Router
 
     @Inject
     lateinit var presenter: PokemonListPresenter
@@ -40,7 +34,7 @@ class PokemonListView : Fragment(), PokemonListUi, DisposableHolder by Disposabl
         DaggerPokemonListComponent
             .builder()
             .pokemonListModule(PokemonListModule(this))
-            .applicationComponent((activity?.application as? PokedexApplication)?.applicationComponent)
+            .applicationComponent((activity?.application as? MainApplication)?.applicationComponent)
             .flowContainerComponent((parentFragment as? FlowContainerFragment)?.component)
             .build()
     }
@@ -63,9 +57,8 @@ class PokemonListView : Fragment(), PokemonListUi, DisposableHolder by Disposabl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        onViewCreated.onNext(Unit)
 
-        onChoosePokemon.doOnNext {pokemonName ->
+        onChoosePokemon.doOnNext { pokemonName ->
             router.navigateTo(PokemonInformationScreen(pokemonName))
         }.subscribe().addTo(disposables)
     }
@@ -74,18 +67,8 @@ class PokemonListView : Fragment(), PokemonListUi, DisposableHolder by Disposabl
         pokemonListAdapter.setData(pokemonList)
     }
 
-    override fun onBackPressed(): Boolean {
-        router.exit()
-        return true
-    }
-
     private fun setupRecyclerView() {
         pokemonListRecyclerView.layoutManager = LinearLayoutManager(context)
         pokemonListRecyclerView.adapter = pokemonListAdapter
-    }
-
-    override fun onDestroy() {
-        disposeAll()
-        super.onDestroy()
     }
 }

@@ -2,43 +2,30 @@ package com.example.baseproject.presentation.pokemon_information
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.baseproject.R
-import com.example.baseproject.common.DisposableHolder
-import com.example.baseproject.common.DisposableHolderDelegate
-import com.example.baseproject.presentation.common.BackButtonListener
 import com.example.baseproject.presentation.common.FlowContainerFragment
-import com.example.baseproject.presentation.common.PokedexApplication
-import com.example.baseproject.presentation.pokemonlist.DaggerPokemonListComponent
-import com.example.baseproject.presentation.pokemonlist.PokemonListComponent
-import com.example.baseproject.presentation.pokemonlist.PokemonListModule
-import com.example.baseproject.presentation.pokemonlist.PokemonListView
+import com.example.baseproject.presentation.common.MainApplication
+import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
-import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 
-class PokemonInformationView : Fragment(), PokemonInformationUi,
-    DisposableHolder by DisposableHolderDelegate(),
-    BackButtonListener {
+class PokemonInformationView : SceneView(), PokemonInformationUi{
 
     companion object {
-        fun newInstance(pokemonName: String): PokemonInformationView = PokemonInformationView().apply {
-            this.pokemonName = pokemonName
-        }
+        fun newInstance(pokemonName: String): PokemonInformationView =
+            PokemonInformationView().apply {
+                this.pokemonName = pokemonName
+            }
     }
 
-    override val onViewCreated: PublishSubject<Unit> = PublishSubject.create<Unit>()
     override val onReceivedPokemonName: PublishSubject<String> = PublishSubject.create<String>()
-
-    @Inject
-    lateinit var router: Router
 
     @Inject
     lateinit var presenter: PokemonInformationPresenter
@@ -47,7 +34,7 @@ class PokemonInformationView : Fragment(), PokemonInformationUi,
         DaggerPokemonInformationComponent
             .builder()
             .pokemonInformationModule(PokemonInformationModule(this))
-            .applicationComponent((activity?.application as? PokedexApplication)?.applicationComponent)
+            .applicationComponent((activity?.application as? MainApplication)?.applicationComponent)
             .flowContainerComponent((parentFragment as? FlowContainerFragment)?.component)
             .build()
     }
@@ -73,12 +60,12 @@ class PokemonInformationView : Fragment(), PokemonInformationUi,
     }
 
     override fun displayPokemonInformation(pokemonInformation: PokemonInformation) {
-        pokemonInformationNameText.text = pokemonInformation.name
-    }
+        pokemonInformationNameText?.let {
+            it.text = pokemonInformation.name
 
-    override fun onBackPressed(): Boolean {
-        router.exit()
-        return true
+            Glide.with(this)
+                .load(pokemonInformation.frontSprite)
+                .into(frontImage)
+        }
     }
-
 }
