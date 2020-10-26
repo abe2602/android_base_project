@@ -5,4 +5,7 @@ import io.reactivex.Observable
 
 interface SceneUi : DisposableHolder {
     val onViewCreated: Observable<Unit>
+
+    fun displayLoading()
+    fun dismissLoading()
 }

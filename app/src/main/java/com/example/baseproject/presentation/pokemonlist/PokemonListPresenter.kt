@@ -11,8 +11,11 @@ class PokemonListPresenter @Inject constructor(
 ) : ScenePresenter(pokemonListUi) {
 
     override fun handleViews() {
+        pokemonListUi.displayLoading()
         getPokemonListUC.getSingle(Unit).doOnSuccess {
             pokemonListUi.displayPokemonList(it)
+        }.doFinally {
+            pokemonListUi.dismissLoading()
         }.subscribe().addTo(pokemonListUi.disposables)
     }
 }

@@ -9,13 +9,16 @@ import javax.inject.Inject
 class PokemonInformationPresenter @Inject constructor(
     private val getPokemonInformationUC: GetPokemonInformationUC,
     private val pokemonInformationUi: PokemonInformationUi
-): ScenePresenter(pokemonInformationUi) {
+) : ScenePresenter(pokemonInformationUi) {
 
     override fun handleViews() {
-        pokemonInformationUi.onReceivedPokemonName.flatMapSingle { pokemonName ->
+        pokemonInformationUi.onReceivedPokemonName.doOnNext {
+            pokemonInformationUi.displayLoading()
+        }.flatMapSingle { pokemonName ->
             getPokemonInformationUC.getSingle(GetPokemonInformationParamsUC(pokemonName = pokemonName))
-        }.doOnNext {pokemonInformation ->
+        }.doOnNext { pokemonInformation ->
             pokemonInformationUi.displayPokemonInformation(pokemonInformation)
+            pokemonInformationUi.dismissLoading()
         }.subscribe().addTo(pokemonInformationUi.disposables)
     }
 }

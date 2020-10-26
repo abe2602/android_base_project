@@ -13,6 +13,8 @@ import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
+import kotlinx.android.synthetic.main.toolbar_view.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -55,6 +57,7 @@ class PokemonInformationView : SceneView(), PokemonInformationUi{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        toolbarTitleText.text = this.pokemonName.toUpperCase(Locale.ROOT)
         onViewCreated.onNext(Unit)
         onReceivedPokemonName.onNext(pokemonName)
     }
