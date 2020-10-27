@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.pokemon_information.PokemonInformationView">
+    tools:context=".presentation.pokemoninformation.PokemonInformationView">
 
     <include
         android:id="@+id/toolbar"
@@ -30,7 +30,19 @@
         app:layout_constraintLeft_toLeftOf="@+id/frontImage"
         tools:text="@string/pokemon_name_label"
         />
-    
+
+    <Button
+        android:id="@+id/catchPokemonButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/pokemon_list_action_button_text"
+        app:layout_constraintTop_toBottomOf="@+id/pokemonInformationNameText"
+        app:layout_constraintRight_toRightOf="@+id/pokemonInformationNameText"
+        app:layout_constraintLeft_toLeftOf="@+id/pokemonInformationNameText"
+        />
+
     <include
         android:id="@+id/loading"
         layout="@layout/loading_view" />

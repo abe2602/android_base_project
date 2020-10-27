@@ -2,9 +2,9 @@ package com.example.baseproject.presentation.common
 
 import android.os.Parcelable
 import androidx.fragment.app.Fragment
-import com.example.baseproject.presentation.pokemon_information.PokemonInformationView
+import com.example.baseproject.presentation.caughtpokemonlist.CaughtPokemonListView
+import com.example.baseproject.presentation.pokemoninformation.PokemonInformationView
 import com.example.baseproject.presentation.pokemonlist.PokemonListView
-import com.example.baseproject.presentation.screentwo.FragmentTwo
 import kotlinx.android.parcel.Parcelize
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
@@ -18,9 +18,9 @@ class PokemonListScreen : Screen() {
 }
 
 @Parcelize
-class FragmentTwoScreen : Screen() {
+class CaughtPokemonListScreen : Screen() {
     override fun getFragment(): Fragment {
-        return FragmentTwo.newInstance()
+        return CaughtPokemonListView.newInstance()
     }
 }
 

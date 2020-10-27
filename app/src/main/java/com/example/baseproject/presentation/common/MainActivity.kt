@@ -9,20 +9,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private const val fragmentOneTag: String = "fragmentOneTag"
-        private const val fragmentTwoTag: String = "fragmentTwoTag"
+        private const val pokemonListTag: String = "fragmentOneTag"
+        private const val caughtPokemonListTag: String = "fragmentTwoTag"
     }
 
-    private var activeFragmentTag: String? = fragmentOneTag
+    private var activeFragmentTag: String? = pokemonListTag
 
-    private val fragmentOneOneFlowContainer: FragmentOneFlowContainer by lazy {
-        supportFragmentManager.findFragmentByTag(fragmentOneTag) as? FragmentOneFlowContainer
-            ?: FragmentOneFlowContainer.newInstance()
+    private val pokemonListFlowContainer: PokemonListFlowContainer by lazy {
+        supportFragmentManager.findFragmentByTag(pokemonListTag) as? PokemonListFlowContainer
+            ?: PokemonListFlowContainer.newInstance()
     }
 
-    private val fragmentTwoTwoFlowContainer: FragmentTwoFlowContainer by lazy {
-        supportFragmentManager.findFragmentByTag(fragmentTwoTag) as? FragmentTwoFlowContainer
-            ?: FragmentTwoFlowContainer.newInstance()
+    private val caughtPokemonListFlowContainer: CaughtPokemonListFlowContainer by lazy {
+        supportFragmentManager.findFragmentByTag(caughtPokemonListTag) as? CaughtPokemonListFlowContainer
+            ?: CaughtPokemonListFlowContainer.newInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         setupNavActions()
 
-        supportFragmentManager.beginTransaction().hide(fragmentTwoTwoFlowContainer).show(fragmentOneOneFlowContainer).commit()
-        activeFragmentTag = fragmentOneOneFlowContainer.tag
+        supportFragmentManager.beginTransaction().hide(caughtPokemonListFlowContainer).show(pokemonListFlowContainer).commit()
+        activeFragmentTag = pokemonListFlowContainer.tag
     }
 
 
@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavActions(){
         supportFragmentManager.beginTransaction()
-            .add(R.id.mainFlowContainer, fragmentOneOneFlowContainer, fragmentOneTag)
-            .add(R.id.mainFlowContainer, fragmentTwoTwoFlowContainer, fragmentTwoTag)
+            .add(R.id.mainFlowContainer, pokemonListFlowContainer, pokemonListTag)
+            .add(R.id.mainFlowContainer, caughtPokemonListFlowContainer, caughtPokemonListTag)
             .commitNow()
 
         //Cliques na bottomNavigation
@@ -58,13 +58,13 @@ class MainActivity : AppCompatActivity() {
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction().hide(fragmentTwoTwoFlowContainer).show(fragmentOneOneFlowContainer).commit()
-                activeFragmentTag = fragmentOneOneFlowContainer.tag
+                supportFragmentManager.beginTransaction().hide(caughtPokemonListFlowContainer).show(pokemonListFlowContainer).commit()
+                activeFragmentTag = pokemonListFlowContainer.tag
                 true
             }
             R.id.navigation_dashboard -> {
-                supportFragmentManager.beginTransaction().hide(fragmentOneOneFlowContainer).show(fragmentTwoTwoFlowContainer).commit()
-                activeFragmentTag = fragmentTwoTwoFlowContainer.tag
+                supportFragmentManager.beginTransaction().hide(pokemonListFlowContainer).show(caughtPokemonListFlowContainer).commit()
+                activeFragmentTag = caughtPokemonListFlowContainer.tag
                 true
             }
             else -> {

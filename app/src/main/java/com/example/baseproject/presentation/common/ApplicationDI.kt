@@ -1,10 +1,12 @@
 package com.example.baseproject.presentation.common
 
+import com.example.baseproject.data.cache.PokemonCDS
 import com.example.baseproject.data.remote.PokemonRDS
-import com.example.baseproject.data.remote.repository.PokemonRepository
+import com.example.baseproject.data.repository.PokemonRepository
 import com.example.domain.datarepository.PokemonDataRepository
 import com.example.domain.usecase.BackgroundScheduler
 import com.example.domain.usecase.MainScheduler
+import com.pacoworks.rxpaper2.RxPaperBook
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -33,25 +35,34 @@ class ApplicationModule {
     @Provides
     @Singleton
     @BackgroundScheduler
-    fun backgroundThreadScheduler() = Schedulers.io()
+    fun backgroundThreadScheduler(): Scheduler = Schedulers.io()
 
     @Provides
     @Singleton
     @MainScheduler
-    fun mainThreadScheduler() = AndroidSchedulers.mainThread()
+    fun mainThreadScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
     @Provides
     @Singleton
     fun getPokemonRDS(retrofit: Retrofit): PokemonRDS = retrofit.create(PokemonRDS::class.java)
 
     @Provides
-    fun getPokemonRepository(pokemonRDS: PokemonRDS) : PokemonDataRepository = PokemonRepository(pokemonRDS)
+    @Singleton
+    fun pokemonCDS(rxPaperBook: RxPaperBook): PokemonCDS = PokemonCDS(rxPaperBook)
+
+    @Provides
+    @Singleton
+    fun getRxPaper(): RxPaperBook = RxPaperBook.with()
+
+    @Provides
+    fun getPokemonRepository(pokemonRDS: PokemonRDS, pokemonCDS: PokemonCDS): PokemonDataRepository =
+        PokemonRepository(pokemonRDS, pokemonCDS)
 }
 
 @Component(modules = [ApplicationModule::class])
 @Singleton
 interface ApplicationComponent {
-    fun getPokemonRepository() : PokemonDataRepository
+    fun getPokemonRepository(): PokemonDataRepository
 
     @BackgroundScheduler
     fun backgroundThreadScheduler(): Scheduler
