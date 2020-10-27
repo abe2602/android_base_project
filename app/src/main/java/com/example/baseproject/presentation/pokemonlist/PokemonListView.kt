@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
@@ -16,7 +17,6 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
-import java.util.*
 import javax.inject.Inject
 
 class PokemonListView : SceneView(), PokemonListUi {
@@ -58,7 +58,8 @@ class PokemonListView : SceneView(), PokemonListUi {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbarTitleText.text = "POKÉMON LIST"
+        toolbarTitleText.text = getString(R.string.pokemon_list_title)
+        setupAppBar(toolbar as Toolbar, false)
         setupRecyclerView()
 
         onChoosePokemon.doOnNext { pokemonName ->

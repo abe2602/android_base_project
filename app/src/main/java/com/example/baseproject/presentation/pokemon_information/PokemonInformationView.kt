@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
@@ -13,6 +14,8 @@ import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
+import kotlinx.android.synthetic.main.fragment_pokemon_information_view.toolbar
+import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
 import java.util.*
 import javax.inject.Inject
@@ -58,6 +61,7 @@ class PokemonInformationView : SceneView(), PokemonInformationUi{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbarTitleText.text = this.pokemonName.toUpperCase(Locale.ROOT)
+        setupAppBar(toolbar as Toolbar, true, isModal = false)
         onViewCreated.onNext(Unit)
         onReceivedPokemonName.onNext(pokemonName)
     }

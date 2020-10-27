@@ -1,14 +1,15 @@
 package com.example.baseproject.presentation.common.scene
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.example.baseproject.R
 import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
 import com.example.baseproject.presentation.common.BackButtonListener
-import com.example.baseproject.presentation.common.FlowContainerFragment
-import com.example.baseproject.presentation.common.MainApplication
+import com.jakewharton.rxbinding3.view.clicks
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.loading_view.*
 import ru.terrakok.cicerone.Router
@@ -43,5 +44,23 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
     override fun onBackPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    protected fun setupAppBar(
+        toolbar: Toolbar,
+        showIndicator: Boolean = true,
+        isModal: Boolean = false
+    ) {
+        if (showIndicator) {
+            if (isModal) {
+                toolbar.setNavigationIcon(R.drawable.ic_close)
+            } else {
+                toolbar.setNavigationIcon(R.drawable.ic_back)
+            }
+
+            toolbar.clicks().doOnNext {
+                onBackPressed()
+            }.subscribe().addTo(disposables)
+        }
     }
 }
