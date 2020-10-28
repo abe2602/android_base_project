@@ -13,5 +13,5 @@ class PokemonCDS @Inject constructor(private val rxPaper: RxPaperBook) {
     fun getCaughtPokemonList(): Single<MutableList<String>> =
         rxPaper.read<MutableList<String>>(CAUGHT_POKEMON_LIST_KEY).onErrorReturn { mutableListOf() }
 
-    fun catchPokemon(caughtPokemonList: List<String>): Completable = rxPaper.write(CAUGHT_POKEMON_LIST_KEY, caughtPokemonList)
+    fun upsertCaughtPokemon(caughtPokemonList: List<String>): Completable = rxPaper.write(CAUGHT_POKEMON_LIST_KEY, caughtPokemonList)
 }

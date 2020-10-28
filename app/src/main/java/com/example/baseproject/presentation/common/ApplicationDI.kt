@@ -1,5 +1,6 @@
 package com.example.baseproject.presentation.common
 
+import com.example.baseproject.common.CatchPokemonDataObservable
 import com.example.baseproject.data.cache.PokemonCDS
 import com.example.baseproject.data.remote.PokemonRDS
 import com.example.baseproject.data.repository.PokemonRepository
@@ -10,9 +11,11 @@ import com.pacoworks.rxpaper2.RxPaperBook
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,6 +23,8 @@ import javax.inject.Singleton
 
 @Module
 class ApplicationModule {
+    private val catchPokemonDataObservable: PublishSubject<Unit> = PublishSubject.create()
+
     @Provides
     @Singleton
     fun getRetrofit(): Retrofit {
@@ -55,8 +60,17 @@ class ApplicationModule {
     fun getRxPaper(): RxPaperBook = RxPaperBook.with()
 
     @Provides
-    fun getPokemonRepository(pokemonRDS: PokemonRDS, pokemonCDS: PokemonCDS): PokemonDataRepository =
-        PokemonRepository(pokemonRDS, pokemonCDS)
+    @CatchPokemonDataObservable
+    fun getCatchPokemonDataObservableSubject(): PublishSubject<Unit> = catchPokemonDataObservable
+
+    @Provides
+    @CatchPokemonDataObservable
+    fun getCatchPokemonDataObservable(): Observable<Unit> = catchPokemonDataObservable
+
+    @Provides
+    fun getPokemonRepository(
+        pokemonRepository: PokemonRepository
+    ): PokemonDataRepository = pokemonRepository
 }
 
 @Component(modules = [ApplicationModule::class])
@@ -69,4 +83,10 @@ interface ApplicationComponent {
 
     @MainScheduler
     fun mainThreadScheduler(): Scheduler
+
+    @CatchPokemonDataObservable
+    fun getCatchPokemonDataObservableSubject(): PublishSubject<Unit>
+
+    @CatchPokemonDataObservable
+    fun getCatchPokemonDataObservable(): Observable<Unit>
 }

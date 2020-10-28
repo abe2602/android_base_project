@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.my_item_layout.view.*
 class CaughtPokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
 
     fun setData(pokemonList: List<String>) {
+        clear()
         pokemonList.forEach {
             add(PokemonItem(name = it))
         }

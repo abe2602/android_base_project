@@ -9,4 +9,5 @@ interface PokemonInformationUi : SceneUi {
 
     val onReceivedPokemonName: Observable<String>
     val onCatchPokemon: Observable<String>
+    val onReleasePokemon: Observable<String>
 }

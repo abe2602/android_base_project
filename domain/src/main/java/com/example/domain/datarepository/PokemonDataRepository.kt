@@ -9,5 +9,6 @@ interface PokemonDataRepository {
     fun getPokemonList(): Single<List<Pokemon>>
     fun getPokemonInformation(pokemonName: String): Single<PokemonInformation>
     fun catchPokemon(pokemonName: String): Completable
+    fun releasePokemon(pokemonName: String): Completable
     fun getCaughtPokemonList(): Single<List<String>>
 }

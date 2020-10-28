@@ -9,4 +9,9 @@ fun PokemonRM.toDM() = Pokemon(name = name)
 
 fun List<PokemonRM>.toDM() = this.map { it.toDM() }
 
-fun PokemonInformationRM.toDM() = PokemonInformation(name = name, frontSprite = pokemonSprites.frontSprite, backSprite = pokemonSprites.backSprite)
+fun PokemonInformationRM.toDM(caughtPokemon: Boolean) = PokemonInformation(
+    name = name,
+    frontSprite = pokemonSprites.frontSprite,
+    backSprite = pokemonSprites.backSprite,
+    caughtPokemon = caughtPokemon
+)

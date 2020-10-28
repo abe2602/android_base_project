@@ -37,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
-        android:text="@string/pokemon_list_action_button_text"
         app:layout_constraintTop_toBottomOf="@+id/pokemonInformationNameText"
         app:layout_constraintRight_toRightOf="@+id/pokemonInformationNameText"
         app:layout_constraintLeft_toLeftOf="@+id/pokemonInformationNameText"
+        tools:text="@string/pokemon_list_catch_text"
         />
 
     <include

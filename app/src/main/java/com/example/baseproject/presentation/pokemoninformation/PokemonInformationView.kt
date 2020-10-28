@@ -33,6 +33,8 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
 
     override val onReceivedPokemonName: PublishSubject<String> = PublishSubject.create<String>()
     override val onCatchPokemon: PublishSubject<String> = PublishSubject.create<String>()
+    override val onReleasePokemon: PublishSubject<String> = PublishSubject.create<String>()
+    private var caughtPokemon: Boolean = false
 
     @Inject
     lateinit var presenter: PokemonInformationPresenter
@@ -62,23 +64,41 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         toolbarTitleText.text = this.pokemonName.toUpperCase(Locale.ROOT)
         setupAppBar(toolbar as Toolbar, true, isModal = false)
+
         onViewCreated.onNext(Unit)
         onReceivedPokemonName.onNext(pokemonName)
-
-
     }
 
     override fun displayPokemonInformation(pokemonInformation: PokemonInformation) {
-        pokemonInformationNameText.text = pokemonInformation.name
+        val pokemonName = pokemonInformation.name
+        caughtPokemon = pokemonInformation.caughtPokemon
+        pokemonInformationNameText.text = pokemonName.toUpperCase(Locale.ROOT)
+
+        changeCatchButtonText(caughtPokemon)
 
         Glide.with(this)
             .load(pokemonInformation.frontSprite)
             .into(frontImage)
 
         catchPokemonButton.clicks().doOnNext {
-            onCatchPokemon.onNext(pokemonInformation.name)
+            if (caughtPokemon) {
+                onReleasePokemon.onNext(pokemonName)
+            } else {
+                onCatchPokemon.onNext(pokemonName)
+            }
+            caughtPokemon = !caughtPokemon
+            changeCatchButtonText(caughtPokemon)
         }.subscribe().addTo(disposables)
+    }
+
+    private fun changeCatchButtonText(caughtPokemon: Boolean) {
+        if (caughtPokemon) {
+            catchPokemonButton.text = getText(R.string.pokemon_list_release_text)
+        } else {
+            catchPokemonButton.text = getText(R.string.pokemon_list_catch_text)
+        }
     }
 }
