@@ -3,4 +3,9 @@
     <string name="dashboard_label">Nav</string>
     <string name="home_label">Home</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pokemon_name_label">Pokemon Name</string>
+    <string name="pokemon_image_description">Pokemon Image Description</string>
+    <string name="pokemon_list_title">POKÉMON LIST</string>
+    <string name="pokemon_list_catch_text">CATCH POKÉMON</string>
+    <string name="pokemon_list_release_text">RELEASE POKÉMON</string>
 </resources>

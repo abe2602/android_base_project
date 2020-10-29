@@ -1,18 +1,32 @@
 package com.example.baseproject.presentation.common
 
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
-import com.example.baseproject.presentation.pokemonlist.FragmentOne
-import com.example.baseproject.presentation.screentwo.FragmentTwo
+import com.example.baseproject.presentation.caughtpokemonlist.CaughtPokemonListView
+import com.example.baseproject.presentation.pokemoninformation.PokemonInformationView
+import com.example.baseproject.presentation.pokemonlist.PokemonListView
+import kotlinx.android.parcel.Parcelize
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class FragmentOneScreen : SupportAppScreen() {
+sealed class Screen : SupportAppScreen(), Parcelable
+
+@Parcelize
+class PokemonListScreen : Screen() {
     override fun getFragment(): Fragment {
-        return FragmentOne.newInstance()
+        return PokemonListView.newInstance()
     }
 }
 
-class FragmentTwoScreen : SupportAppScreen() {
+@Parcelize
+class CaughtPokemonListScreen : Screen() {
     override fun getFragment(): Fragment {
-        return FragmentTwo.newInstance()
+        return CaughtPokemonListView.newInstance()
+    }
+}
+
+@Parcelize
+class PokemonInformationScreen(private val pokemonName: String) : Screen() {
+    override fun getFragment(): Fragment {
+        return PokemonInformationView.newInstance(pokemonName)
     }
 }

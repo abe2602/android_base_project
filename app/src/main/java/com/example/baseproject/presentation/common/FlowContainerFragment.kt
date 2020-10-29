@@ -65,31 +65,31 @@ sealed class FlowContainerFragment : Fragment(), BackButtonListener {
 }
 
 // Fragment da primeira aba
-class FragmentOneFlowContainer : FlowContainerFragment() {
+class PokemonListFlowContainer : FlowContainerFragment() {
     companion object {
-        fun newInstance() = FragmentOneFlowContainer()
+        fun newInstance() = PokemonListFlowContainer()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
-            cicerone.router.replaceScreen(FragmentOneScreen())
+            cicerone.router.replaceScreen(PokemonListScreen())
         }
     }
 }
 
 // Fragment da segunda aba
-class FragmentTwoFlowContainer : FlowContainerFragment() {
+class CaughtPokemonListFlowContainer : FlowContainerFragment() {
     companion object {
-        fun newInstance() = FragmentTwoFlowContainer()
+        fun newInstance() = CaughtPokemonListFlowContainer()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState == null) {
-            cicerone.router.replaceScreen(FragmentTwoScreen())
+            cicerone.router.replaceScreen(CaughtPokemonListScreen())
         }
     }
 }
