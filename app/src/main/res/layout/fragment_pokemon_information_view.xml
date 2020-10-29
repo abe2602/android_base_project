@@ -31,19 +31,24 @@
         tools:text="@string/pokemon_name_label"
         />
 
-    <Button
-        android:id="@+id/catchPokemonButton"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@+id/pokemonInformationNameText"
         app:layout_constraintRight_toRightOf="@+id/pokemonInformationNameText"
-        app:layout_constraintLeft_toLeftOf="@+id/pokemonInformationNameText"
-        tools:text="@string/pokemon_list_catch_text"
-        />
+        app:layout_constraintLeft_toLeftOf="@+id/pokemonInformationNameText">
+
+        <Button
+            android:id="@+id/catchPokemonButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="@string/pokemon_list_catch_text"
+            />
+    </FrameLayout>
 
     <include
         android:id="@+id/loading"
-        layout="@layout/loading_view" />
+        layout="@layout/loading_view"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

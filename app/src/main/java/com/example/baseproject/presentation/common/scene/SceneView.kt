@@ -1,6 +1,9 @@
 package com.example.baseproject.presentation.common.scene
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -33,7 +36,9 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
     }
 
     override fun dismissLoading() {
-        loading.visibility = View.GONE
+        Handler(Looper.getMainLooper()).postDelayed({
+            loading.visibility = View.GONE
+        }, 300)
     }
 
     override fun onDestroyView() {
