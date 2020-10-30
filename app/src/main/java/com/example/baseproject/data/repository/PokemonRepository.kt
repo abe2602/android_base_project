@@ -16,10 +16,10 @@ class PokemonRepository @Inject constructor(
     private val pokemonRDS: PokemonRDS,
     private val pokemonCDS: PokemonCDS,
     @CatchPokemonDataObservable private val catchPokemonDataObservable: PublishSubject<Unit>
-) :
-    PokemonDataRepository {
-    override fun getPokemonList(): Single<List<Pokemon>> =
-        pokemonRDS.getPokemonList().map {
+) : PokemonDataRepository {
+
+    override fun getPokemonList(limit: Int, offset: Int): Single<List<Pokemon>> =
+        pokemonRDS.getPokemonList(limit, offset).map {
             it.pokemonList.toDM()
         }
 
@@ -38,13 +38,14 @@ class PokemonRepository @Inject constructor(
             catchPokemonDataObservable.onNext(Unit)
         }
 
-    override fun releasePokemon(pokemonName: String): Completable = pokemonCDS.getCaughtPokemonList()
-        .flatMapCompletable { caughtPokemonList ->
-            caughtPokemonList.remove(pokemonName)
-            pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
-        }.doOnComplete {
-            catchPokemonDataObservable.onNext(Unit)
-        }
+    override fun releasePokemon(pokemonName: String): Completable =
+        pokemonCDS.getCaughtPokemonList()
+            .flatMapCompletable { caughtPokemonList ->
+                caughtPokemonList.remove(pokemonName)
+                pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
+            }.doOnComplete {
+                catchPokemonDataObservable.onNext(Unit)
+            }
 
     override fun getCaughtPokemonList(): Single<List<String>> =
         pokemonCDS.getCaughtPokemonList().map {

@@ -10,11 +10,13 @@ class GetPokemonListUC @Inject constructor(
     @BackgroundScheduler backgroundScheduler: Scheduler,
     @MainScheduler mainScheduler: Scheduler,
     private val pokemonRepository: PokemonDataRepository
-) : SingleUseCase<Unit, List<Pokemon>>(
+) : SingleUseCase<GetPokemonListUCParams, List<Pokemon>>(
     observeOn = mainScheduler,
     subscribeOn = backgroundScheduler
 ) {
-    override fun getRawSingle(params: Unit): Single<List<Pokemon>> =
-        pokemonRepository.getPokemonList()
+    override fun getRawSingle(params: GetPokemonListUCParams): Single<List<Pokemon>> =
+        pokemonRepository.getPokemonList(params.limit, params.offset)
 }
+
+data class GetPokemonListUCParams(val limit: Int, val offset: Int)
 

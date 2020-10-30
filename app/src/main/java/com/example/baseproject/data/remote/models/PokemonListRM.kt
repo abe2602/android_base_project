@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PokemonListRM(
     @SerializedName("previous")
-    val previousPage: Int?,
+    val previousPage: String?,
 
     @SerializedName("next")
     val nextPageUrl: String?,

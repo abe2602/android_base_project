@@ -26,6 +26,7 @@ class PokemonListView : SceneView(), PokemonListUi {
     }
 
     override val onChoosePokemon: PublishSubject<String> = PublishSubject.create<String>()
+    override val onRequestMorePokemon: PublishSubject<Unit> = PublishSubject.create<Unit>()
 
     @Inject
     lateinit var presenter: PokemonListPresenter
@@ -54,6 +55,7 @@ class PokemonListView : SceneView(), PokemonListUi {
         component?.inject(this)
         pokemonListAdapter = PokemonListAdapter()
         pokemonListAdapter.onChoosePokemon.subscribe(onChoosePokemon)
+        pokemonListAdapter.onRequestMoreItems.subscribe(onRequestMorePokemon)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,8 +69,12 @@ class PokemonListView : SceneView(), PokemonListUi {
         }.subscribe().addTo(disposables)
     }
 
-    override fun displayPokemonList(pokemonList: List<Pokemon>) {
-        pokemonListAdapter.setData(pokemonList)
+    override fun displayNoInternetError() {
+        pokemonListAdapter.addNewPageError()
+    }
+
+    override fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int) {
+        pokemonListAdapter.setData(pokemonList, totalFetchedItems)
     }
 
     private fun setupRecyclerView() {

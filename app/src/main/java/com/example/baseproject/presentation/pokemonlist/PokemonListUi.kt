@@ -5,8 +5,9 @@ import com.example.domain.model.Pokemon
 import io.reactivex.Observable
 
 interface PokemonListUi : SceneUi {
-
-    fun displayPokemonList(pokemonList: List<Pokemon>)
+    fun displayNoInternetError()
+    fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int)
 
     val onChoosePokemon: Observable<String>
+    val onRequestMorePokemon: Observable<Unit>
 }

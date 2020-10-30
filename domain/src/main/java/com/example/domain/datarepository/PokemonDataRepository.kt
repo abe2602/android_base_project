@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 interface PokemonDataRepository {
-    fun getPokemonList(): Single<List<Pokemon>>
+    fun getPokemonList(limit: Int, offset: Int): Single<List<Pokemon>>
     fun getPokemonInformation(pokemonName: String): Single<PokemonInformation>
     fun catchPokemon(pokemonName: String): Completable
     fun releasePokemon(pokemonName: String): Completable
