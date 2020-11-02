@@ -6,8 +6,11 @@ import io.reactivex.Observable
 
 interface PokemonListUi : SceneUi {
     fun displayNoInternetError()
-    fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int)
+    fun displayNewPageLoading()
+    fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int, totalItems: Int)
+    fun dismissNewPageLoading()
 
     val onChoosePokemon: Observable<String>
     val onRequestMorePokemon: Observable<Unit>
+    val onTryAgain: Observable<Unit>
 }

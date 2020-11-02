@@ -27,6 +27,7 @@ class PokemonListView : SceneView(), PokemonListUi {
 
     override val onChoosePokemon: PublishSubject<String> = PublishSubject.create<String>()
     override val onRequestMorePokemon: PublishSubject<Unit> = PublishSubject.create<Unit>()
+    override val onTryAgain: PublishSubject<Unit> = PublishSubject.create<Unit>()
 
     @Inject
     lateinit var presenter: PokemonListPresenter
@@ -56,6 +57,7 @@ class PokemonListView : SceneView(), PokemonListUi {
         pokemonListAdapter = PokemonListAdapter()
         pokemonListAdapter.onChoosePokemon.subscribe(onChoosePokemon)
         pokemonListAdapter.onRequestMoreItems.subscribe(onRequestMorePokemon)
+        pokemonListAdapter.onTryAgain.subscribe(onTryAgain)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,8 +75,16 @@ class PokemonListView : SceneView(), PokemonListUi {
         pokemonListAdapter.addNewPageError()
     }
 
-    override fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int) {
-        pokemonListAdapter.setData(pokemonList, totalFetchedItems)
+    override fun displayNewPageLoading() {
+        pokemonListAdapter.addNewPageLoading()
+    }
+
+    override fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int, totalItems: Int) {
+        pokemonListAdapter.setData(pokemonList, totalFetchedItems, totalItems)
+    }
+
+    override fun dismissNewPageLoading() {
+        pokemonListAdapter.removeNewPageLoading()
     }
 
     private fun setupRecyclerView() {

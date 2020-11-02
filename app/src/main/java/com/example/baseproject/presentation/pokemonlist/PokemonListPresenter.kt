@@ -11,30 +11,50 @@ class PokemonListPresenter @Inject constructor(
     private val pokemonListUi: PokemonListUi,
     private val getPokemonListUC: GetPokemonListUC
 ) : ScenePresenter(pokemonListUi) {
-    private var limit: Int = 0
+    private var limit: Int = 30
     private var offset: Int = 0
     private var totalFetchedItems = 0
+    private var isFetchingNewPage = false
 
     override fun handleViews() {
-        pokemonListUi.displayLoading()
-
-        Observable.merge(pokemonListUi.onRequestMorePokemon, Observable.just(Unit))
+        Observable.just(Unit)
             .doOnNext {
-                if(offset == 0 && limit != 0) {
-                    offset = limit
-                } else {
-                    offset = limit
-                    limit += 30
-                }
+                pokemonListUi.displayLoading()
             }.flatMapSingle {
                 getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
                     .doOnSuccess {
-                        totalFetchedItems += it.size
-                        pokemonListUi.displayPokemonList(it, totalFetchedItems)
-                    }.doOnError {
-                      //  pokemonListUi.displayNoInternetError()
+                        totalFetchedItems += it.pokemonList.size
+                        pokemonListUi.displayPokemonList(
+                            it.pokemonList,
+                            totalFetchedItems,
+                            it.total
+                        )
                     }.doFinally {
                         pokemonListUi.dismissLoading()
+                    }
+            }.ignoreElements().onErrorComplete().subscribe().addTo(pokemonListUi.disposables)
+        
+        Observable.merge(pokemonListUi.onRequestMorePokemon, pokemonListUi.onTryAgain)
+            .doOnNext {
+                offset = limit
+                limit += 30
+                isFetchingNewPage = true
+
+                pokemonListUi.displayNewPageLoading()
+            }.flatMapSingle {
+                getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
+                    .doOnSuccess {
+                        totalFetchedItems = it.pokemonList.size
+                        pokemonListUi.displayPokemonList(
+                            it.pokemonList,
+                            totalFetchedItems,
+                            it.total
+                        )
+                    }.doOnError {
+                        pokemonListUi.displayNoInternetError()
+                    }.doFinally {
+                        isFetchingNewPage = false
+                        pokemonListUi.dismissNewPageLoading()
                     }
             }.ignoreElements().onErrorComplete().subscribe().addTo(pokemonListUi.disposables)
     }

@@ -8,4 +8,5 @@
     <string name="pokemon_list_title">POKÉMON LIST</string>
     <string name="pokemon_list_catch_text">CATCH POKÉMON</string>
     <string name="pokemon_list_release_text">RELEASE POKÉMON</string>
+    <string name="retry_text">RETRY</string>
 </resources>

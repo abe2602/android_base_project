@@ -79,9 +79,11 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
 
         changeCatchButtonText(caughtPokemon)
 
-        Glide.with(this)
-            .load(pokemonInformation.frontSprite)
-            .into(frontImage)
+        pokemonInformation.frontSprite?.let { frontSprite ->
+            Glide.with(this)
+                .load(frontSprite)
+                .into(frontImage)
+        }
 
         catchPokemonButton.clicks().doOnNext {
             if (caughtPokemon) {

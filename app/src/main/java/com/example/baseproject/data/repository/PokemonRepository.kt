@@ -7,6 +7,7 @@ import com.example.baseproject.data.mappers.toDM
 import com.example.domain.datarepository.PokemonDataRepository
 import com.example.domain.model.Pokemon
 import com.example.domain.model.PokemonInformation
+import com.example.domain.model.PokemonList
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -18,9 +19,9 @@ class PokemonRepository @Inject constructor(
     @CatchPokemonDataObservable private val catchPokemonDataObservable: PublishSubject<Unit>
 ) : PokemonDataRepository {
 
-    override fun getPokemonList(limit: Int, offset: Int): Single<List<Pokemon>> =
+    override fun getPokemonList(limit: Int, offset: Int): Single<PokemonList> =
         pokemonRDS.getPokemonList(limit, offset).map {
-            it.pokemonList.toDM()
+            it.toDM()
         }
 
     override fun getPokemonInformation(pokemonName: String): Single<PokemonInformation> =
