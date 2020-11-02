@@ -79,9 +79,7 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
     private inner class ErrorItem : Item<GroupieViewHolder>(),
         DisposableHolder by DisposableHolderDelegate() {
         override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-            viewHolder.itemView.retryButton.clicks().doOnNext {
-                onTryAgainSubject.onNext(Unit)
-            }.subscribe().addTo(disposables)
+            viewHolder.itemView.retryButton.clicks().subscribe(onTryAgainSubject)
         }
 
         override fun getLayout(): Int = R.layout.item_no_connection_error

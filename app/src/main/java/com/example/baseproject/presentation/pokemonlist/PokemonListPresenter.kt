@@ -29,17 +29,19 @@ class PokemonListPresenter @Inject constructor(
                             totalFetchedItems,
                             it.total
                         )
+                        offset = limit
+                        limit += 30
                     }.doFinally {
                         pokemonListUi.dismissLoading()
                     }
-            }.ignoreElements().onErrorComplete().subscribe().addTo(pokemonListUi.disposables)
-        
+            }.ignoreElements()
+            .onErrorComplete()
+            .subscribe()
+            .addTo(pokemonListUi.disposables)
+
         Observable.merge(pokemonListUi.onRequestMorePokemon, pokemonListUi.onTryAgain)
             .doOnNext {
-                offset = limit
-                limit += 30
                 isFetchingNewPage = true
-
                 pokemonListUi.displayNewPageLoading()
             }.flatMapSingle {
                 getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
@@ -50,12 +52,17 @@ class PokemonListPresenter @Inject constructor(
                             totalFetchedItems,
                             it.total
                         )
+                        offset = limit
+                        limit += 30
                     }.doOnError {
                         pokemonListUi.displayNoInternetError()
                     }.doFinally {
                         isFetchingNewPage = false
                         pokemonListUi.dismissNewPageLoading()
                     }
-            }.ignoreElements().onErrorComplete().subscribe().addTo(pokemonListUi.disposables)
+            }.ignoreElements()
+            .onErrorComplete()
+            .subscribe()
+            .addTo(pokemonListUi.disposables)
     }
 }
