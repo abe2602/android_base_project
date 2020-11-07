@@ -17,10 +17,13 @@ class PokemonListPresenter @Inject constructor(
     private var isFetchingNewPage = false
 
     override fun handleViews() {
-        Observable.just(Unit)
+
+        Observable.merge(
+            Observable.just(Unit),
+            pokemonListUi.onTryAgain.filter { totalFetchedItems == 0 })
             .doOnNext {
                 pokemonListUi.displayLoading()
-            }.flatMapSingle {
+            }.flatMapCompletable {
                 getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
                     .doOnSuccess {
                         totalFetchedItems += it.pokemonList.size
@@ -31,38 +34,43 @@ class PokemonListPresenter @Inject constructor(
                         )
                         offset = limit
                         limit += 30
+                    }.doOnError {
+                        pokemonListUi.displayBlockingError()
                     }.doFinally {
                         pokemonListUi.dismissLoading()
-                    }
-            }.ignoreElements()
+                    }.ignoreElement()
+                    .onErrorComplete()
+            }
             .onErrorComplete()
             .subscribe()
-            .addTo(pokemonListUi.disposables)
+            .addTo(disposables)
 
-        Observable.merge(pokemonListUi.onRequestMorePokemon, pokemonListUi.onTryAgain)
-            .doOnNext {
-                isFetchingNewPage = true
-                pokemonListUi.displayNewPageLoading()
-            }.flatMapSingle {
-                getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
-                    .doOnSuccess {
-                        totalFetchedItems = it.pokemonList.size
-                        pokemonListUi.displayPokemonList(
-                            it.pokemonList,
-                            totalFetchedItems,
-                            it.total
-                        )
-                        offset = limit
-                        limit += 30
-                    }.doOnError {
-                        pokemonListUi.displayNoInternetError()
-                    }.doFinally {
-                        isFetchingNewPage = false
-                        pokemonListUi.dismissNewPageLoading()
-                    }
-            }.ignoreElements()
+        Observable.merge(
+            pokemonListUi.onRequestMorePokemon,
+            pokemonListUi.onTryAgain.filter { totalFetchedItems > 0 }
+        ).doOnNext {
+            isFetchingNewPage = true
+            pokemonListUi.displayNewPageLoading()
+        }.flatMapCompletable {
+            getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
+                .doOnSuccess {
+                    totalFetchedItems = it.pokemonList.size
+                    pokemonListUi.displayPokemonList(
+                        it.pokemonList,
+                        totalFetchedItems,
+                        it.total
+                    )
+                    offset = limit
+                    limit += 30
+                }.doOnError {
+                    pokemonListUi.displayNewPageError()
+                }.doFinally {
+                    isFetchingNewPage = false
+                    pokemonListUi.dismissNewPageLoading()
+                }.ignoreElement().onErrorComplete()
+        }
             .onErrorComplete()
             .subscribe()
-            .addTo(pokemonListUi.disposables)
+            .addTo(disposables)
     }
 }

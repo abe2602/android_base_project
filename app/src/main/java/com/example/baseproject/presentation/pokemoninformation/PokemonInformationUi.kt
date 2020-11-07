@@ -6,6 +6,7 @@ import io.reactivex.Observable
 
 interface PokemonInformationUi : SceneUi {
     fun displayPokemonInformation(pokemonInformation: PokemonInformation)
+    fun displayBlockingError()
 
     val onReceivedPokemonName: Observable<String>
     val onCatchPokemon: Observable<String>

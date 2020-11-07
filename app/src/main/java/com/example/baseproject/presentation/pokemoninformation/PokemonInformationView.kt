@@ -96,6 +96,10 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
         }.subscribe().addTo(disposables)
     }
 
+    override fun displayBlockingError() {
+        TODO("Not yet implemented")
+    }
+
     private fun changeCatchButtonText(caughtPokemon: Boolean) {
         if (caughtPokemon) {
             catchPokemonButton.text = getText(R.string.pokemon_list_release_text)

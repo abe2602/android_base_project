@@ -11,12 +11,14 @@ import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
 import com.example.baseproject.presentation.common.PokemonInformationScreen
+import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.Pokemon
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
+import kotlinx.android.synthetic.main.view_empty_state.*
 import javax.inject.Inject
 
 class PokemonListView : SceneView(), PokemonListUi {
@@ -71,7 +73,7 @@ class PokemonListView : SceneView(), PokemonListUi {
         }.subscribe().addTo(disposables)
     }
 
-    override fun displayNoInternetError() {
+    override fun displayNewPageError() {
         pokemonListAdapter.addNewPageError()
     }
 
@@ -79,7 +81,12 @@ class PokemonListView : SceneView(), PokemonListUi {
         pokemonListAdapter.addNewPageLoading()
     }
 
-    override fun displayPokemonList(pokemonList: List<Pokemon>, totalFetchedItems: Int, totalItems: Int) {
+    override fun displayPokemonList(
+        pokemonList: List<Pokemon>,
+        totalFetchedItems: Int,
+        totalItems: Int
+    ) {
+        dismissBlockingError()
         pokemonListAdapter.setData(pokemonList, totalFetchedItems, totalItems)
     }
 
@@ -87,8 +94,20 @@ class PokemonListView : SceneView(), PokemonListUi {
         pokemonListAdapter.removeNewPageLoading()
     }
 
+    //todo: não funciona AINDA
+    override fun displayBlockingError() {
+        errorLayout.visibility = View.VISIBLE
+        pokemonListRecyclerView.visibility = View.GONE
+        actionButton.clicks().subscribe(onTryAgain)
+    }
+
     private fun setupRecyclerView() {
         pokemonListRecyclerView.layoutManager = LinearLayoutManager(context)
         pokemonListRecyclerView.adapter = pokemonListAdapter
+    }
+
+    private fun dismissBlockingError() {
+        errorLayout.visibility = View.GONE
+        pokemonListRecyclerView.visibility = View.VISIBLE
     }
 }
