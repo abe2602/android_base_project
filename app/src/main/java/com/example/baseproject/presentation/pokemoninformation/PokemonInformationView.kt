@@ -15,9 +15,13 @@ import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.*
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
+import kotlinx.android.synthetic.main.fragment_pokemon_information_view.errorLayout
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.toolbar
+import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
+import kotlinx.android.synthetic.main.view_empty_state.*
 import java.util.*
 import javax.inject.Inject
 
@@ -31,6 +35,7 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
             }
     }
 
+    override val onTryAgain: PublishSubject<Unit> = PublishSubject.create<Unit>()
     override val onReceivedPokemonName: PublishSubject<String> = PublishSubject.create<String>()
     override val onCatchPokemon: PublishSubject<String> = PublishSubject.create<String>()
     override val onReleasePokemon: PublishSubject<String> = PublishSubject.create<String>()
@@ -79,9 +84,11 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
 
         changeCatchButtonText(caughtPokemon)
 
-        Glide.with(this)
-            .load(pokemonInformation.frontSprite)
-            .into(frontImage)
+        pokemonInformation.frontSprite?.let { frontSprite ->
+            Glide.with(this)
+                .load(frontSprite)
+                .into(frontImage)
+        }
 
         catchPokemonButton.clicks().doOnNext {
             if (caughtPokemon) {
@@ -92,6 +99,17 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
             caughtPokemon = !caughtPokemon
             changeCatchButtonText(caughtPokemon)
         }.subscribe().addTo(disposables)
+
+        dismissBlockingError()
+    }
+
+    override fun displayBlockingError() {
+        displayBlockingError(pokemonInformationContentLayout, errorLayout)
+        actionButton.clicks().subscribe(onTryAgain)
+    }
+
+    private fun dismissBlockingError() {
+        dismissBlockingError(pokemonInformationContentLayout, errorLayout)
     }
 
     private fun changeCatchButtonText(caughtPokemon: Boolean) {

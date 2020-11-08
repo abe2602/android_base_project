@@ -7,6 +7,7 @@ import com.example.baseproject.data.mappers.toDM
 import com.example.domain.datarepository.PokemonDataRepository
 import com.example.domain.model.Pokemon
 import com.example.domain.model.PokemonInformation
+import com.example.domain.model.PokemonList
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -16,11 +17,11 @@ class PokemonRepository @Inject constructor(
     private val pokemonRDS: PokemonRDS,
     private val pokemonCDS: PokemonCDS,
     @CatchPokemonDataObservable private val catchPokemonDataObservable: PublishSubject<Unit>
-) :
-    PokemonDataRepository {
-    override fun getPokemonList(): Single<List<Pokemon>> =
-        pokemonRDS.getPokemonList().map {
-            it.pokemonList.toDM()
+) : PokemonDataRepository {
+
+    override fun getPokemonList(limit: Int, offset: Int): Single<PokemonList> =
+        pokemonRDS.getPokemonList(limit, offset).map {
+            it.toDM()
         }
 
     override fun getPokemonInformation(pokemonName: String): Single<PokemonInformation> =
@@ -38,13 +39,14 @@ class PokemonRepository @Inject constructor(
             catchPokemonDataObservable.onNext(Unit)
         }
 
-    override fun releasePokemon(pokemonName: String): Completable = pokemonCDS.getCaughtPokemonList()
-        .flatMapCompletable { caughtPokemonList ->
-            caughtPokemonList.remove(pokemonName)
-            pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
-        }.doOnComplete {
-            catchPokemonDataObservable.onNext(Unit)
-        }
+    override fun releasePokemon(pokemonName: String): Completable =
+        pokemonCDS.getCaughtPokemonList()
+            .flatMapCompletable { caughtPokemonList ->
+                caughtPokemonList.remove(pokemonName)
+                pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
+            }.doOnComplete {
+                catchPokemonDataObservable.onNext(Unit)
+            }
 
     override fun getCaughtPokemonList(): Single<List<String>> =
         pokemonCDS.getCaughtPokemonList().map {

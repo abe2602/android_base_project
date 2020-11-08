@@ -11,12 +11,14 @@ import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
 import com.example.baseproject.presentation.common.PokemonInformationScreen
+import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.Pokemon
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
+import kotlinx.android.synthetic.main.view_empty_state.*
 import javax.inject.Inject
 
 class PokemonListView : SceneView(), PokemonListUi {
@@ -26,6 +28,8 @@ class PokemonListView : SceneView(), PokemonListUi {
     }
 
     override val onChoosePokemon: PublishSubject<String> = PublishSubject.create<String>()
+    override val onRequestMorePokemon: PublishSubject<Unit> = PublishSubject.create<Unit>()
+    override val onTryAgain: PublishSubject<Unit> = PublishSubject.create<Unit>()
 
     @Inject
     lateinit var presenter: PokemonListPresenter
@@ -54,6 +58,8 @@ class PokemonListView : SceneView(), PokemonListUi {
         component?.inject(this)
         pokemonListAdapter = PokemonListAdapter()
         pokemonListAdapter.onChoosePokemon.subscribe(onChoosePokemon)
+        pokemonListAdapter.onRequestMoreItems.subscribe(onRequestMorePokemon)
+        pokemonListAdapter.onTryAgain.subscribe(onTryAgain)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,12 +73,38 @@ class PokemonListView : SceneView(), PokemonListUi {
         }.subscribe().addTo(disposables)
     }
 
-    override fun displayPokemonList(pokemonList: List<Pokemon>) {
-        pokemonListAdapter.setData(pokemonList)
+    override fun displayNewPageError() {
+        pokemonListAdapter.addNewPageError()
+    }
+
+    override fun displayNewPageLoading() {
+        pokemonListAdapter.addNewPageLoading()
+    }
+
+    override fun displayPokemonList(
+        pokemonList: List<Pokemon>,
+        totalFetchedItems: Int,
+        totalItems: Int
+    ) {
+        dismissBlockingError()
+        pokemonListAdapter.setData(pokemonList, totalFetchedItems, totalItems)
+    }
+
+    override fun dismissNewPageLoading() {
+        pokemonListAdapter.removeNewPageLoading()
+    }
+
+    override fun displayBlockingError() {
+        displayBlockingError(pokemonListRecyclerView, errorLayout)
+        actionButton.clicks().subscribe(onTryAgain)
     }
 
     private fun setupRecyclerView() {
         pokemonListRecyclerView.layoutManager = LinearLayoutManager(context)
         pokemonListRecyclerView.adapter = pokemonListAdapter
+    }
+
+    private fun dismissBlockingError() {
+        dismissBlockingError(pokemonListRecyclerView, errorLayout)
     }
 }

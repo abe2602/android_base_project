@@ -10,9 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
+import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.*
+import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.errorLayout
+import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.toolbar
+import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
+import kotlinx.android.synthetic.main.view_empty_state.*
 import javax.inject.Inject
 
 class CaughtPokemonListView : SceneView(), CaughtPokemonListUi {
@@ -22,6 +28,8 @@ class CaughtPokemonListView : SceneView(), CaughtPokemonListUi {
 
     @Inject
     lateinit var presenter: CaughtPokemonListPresenter
+
+    override val onTryAgain: PublishSubject<Unit> = PublishSubject.create<Unit>()
 
     private val component: CaughtPokemonListComponent? by lazy {
         DaggerCaughtPokemonListComponent
@@ -55,9 +63,24 @@ class CaughtPokemonListView : SceneView(), CaughtPokemonListUi {
         setupRecyclerView()
     }
 
-
     override fun displayCaughtPokemonList(caughtPokemonList: List<String>) {
+        dismissBlockingError()
         caughtPokemonListAdapter.setData(caughtPokemonList)
+    }
+
+    override fun displayBlockingError() {
+        displayBlockingError(caughtPokemonListRecyclerView, errorLayout)
+        actionButton.clicks().subscribe(onTryAgain)
+    }
+
+    override fun displayNoCaughtPokemonError() {
+        noCaughtPokemonListIndicator.visibility = View.VISIBLE
+        caughtPokemonListRecyclerView.visibility = View.GONE
+    }
+
+    private fun dismissBlockingError() {
+        dismissBlockingError(caughtPokemonListRecyclerView, errorLayout)
+        noCaughtPokemonListIndicator.visibility = View.GONE
     }
 
     private fun setupRecyclerView() {

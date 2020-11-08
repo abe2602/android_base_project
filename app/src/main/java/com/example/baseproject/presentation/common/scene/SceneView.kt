@@ -3,15 +3,16 @@ package com.example.baseproject.presentation.common.scene
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.baseproject.R
 import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
 import com.example.baseproject.presentation.common.BackButtonListener
-import com.jakewharton.rxbinding3.view.clicks
+import com.example.baseproject.presentation.common.clicks
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.loading_view.*
@@ -67,5 +68,21 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
                 onBackPressed()
             }.subscribe().addTo(disposables)
         }
+    }
+
+    protected fun displayBlockingError(
+        contentView: View?,
+        errorLayout: View?
+    ) {
+        contentView?.visibility = View.GONE
+        errorLayout?.visibility = View.VISIBLE
+    }
+
+    protected fun dismissBlockingError(
+        contentView: View?,
+        errorLayout: View?
+    ) {
+        contentView?.visibility = View.VISIBLE
+        errorLayout?.visibility = View.GONE
     }
 }
