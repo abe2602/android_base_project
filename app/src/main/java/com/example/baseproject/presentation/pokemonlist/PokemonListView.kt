@@ -94,10 +94,8 @@ class PokemonListView : SceneView(), PokemonListUi {
         pokemonListAdapter.removeNewPageLoading()
     }
 
-    //todo: não funciona AINDA
     override fun displayBlockingError() {
-        errorLayout.visibility = View.VISIBLE
-        pokemonListRecyclerView.visibility = View.GONE
+        displayBlockingError(pokemonListRecyclerView, errorLayout)
         actionButton.clicks().subscribe(onTryAgain)
     }
 
@@ -107,7 +105,6 @@ class PokemonListView : SceneView(), PokemonListUi {
     }
 
     private fun dismissBlockingError() {
-        errorLayout.visibility = View.GONE
-        pokemonListRecyclerView.visibility = View.VISIBLE
+        dismissBlockingError(pokemonListRecyclerView, errorLayout)
     }
 }

@@ -19,7 +19,11 @@ class CaughtPokemonListPresenter @Inject constructor(
 
         Observable.merge(catchPokemonDataObservable, Observable.just(Unit)).flatMapSingle {
             getCaughtPokemonListUC.getSingle(Unit).doOnSuccess { caughtPokemonList ->
-                caughtPokemonListUi.displayCaughtPokemonList(caughtPokemonList)
+                if(caughtPokemonList.isEmpty()) {
+                    caughtPokemonListUi.displayNoCaughtPokemonError()
+                } else {
+                    caughtPokemonListUi.displayCaughtPokemonList(caughtPokemonList)
+                }
             }.doFinally {
                 caughtPokemonListUi.dismissLoading()
             }

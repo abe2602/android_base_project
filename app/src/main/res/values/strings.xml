@@ -10,4 +10,5 @@
     <string name="pokemon_list_release_text">RELEASE POKÉMON</string>
     <string name="retry_text">RETRY</string>
     <string name="empty_state_text">Something went wrong!</string>
+    <string name="no_caught_pokemon_text">YOU HAVE NOT CAUGHT ANY POKEMON!</string>
 </resources>

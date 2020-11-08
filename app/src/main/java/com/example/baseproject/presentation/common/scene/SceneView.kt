@@ -70,15 +70,19 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
         }
     }
 
-    protected fun setBlockingError(
+    protected fun displayBlockingError(
         contentView: View?,
-        errorLayout: View?,
-        actionButton: Button?,
-        primaryText: TextView?
+        errorLayout: View?
     ) {
         contentView?.visibility = View.GONE
         errorLayout?.visibility = View.VISIBLE
-        actionButton?.text = "Tente Novamente"
-        primaryText?.text = "Algo de errado aconteceu"
+    }
+
+    protected fun dismissBlockingError(
+        contentView: View?,
+        errorLayout: View?
+    ) {
+        contentView?.visibility = View.VISIBLE
+        errorLayout?.visibility = View.GONE
     }
 }

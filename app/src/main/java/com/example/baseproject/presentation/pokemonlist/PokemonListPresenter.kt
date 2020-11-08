@@ -41,7 +41,6 @@ class PokemonListPresenter @Inject constructor(
                     }.ignoreElement()
                     .onErrorComplete()
             }
-            .onErrorComplete()
             .subscribe()
             .addTo(disposables)
 
@@ -69,7 +68,6 @@ class PokemonListPresenter @Inject constructor(
                     pokemonListUi.dismissNewPageLoading()
                 }.ignoreElement().onErrorComplete()
         }
-            .onErrorComplete()
             .subscribe()
             .addTo(disposables)
     }
