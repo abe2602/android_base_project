@@ -9,7 +9,7 @@
 - [RxBinding](https://github.com/JakeWharton/RxBinding)
 - [Glide](https://github.com/bumptech/glide)
 
-## How does it works?
+## What's happening?
 This is MY MVP Android implementation! I tried to create an example project using MVP + Clean Architecture to work as base to new projects.
 There's a BottomNavigation to navigate between flows, the first tab is called "Home", and the second one "Nav".
 
@@ -36,6 +36,14 @@ screen will be updated.
 <p align="center">
   <img src="https://i.imgur.com/YNeWqoK.png">
 </p>
+
+## Want to understand more about this project?
+If you want to understand how the navigation, dagger, or groupie works, you can check some of my repositories!
+- [Groupie Example](https://github.com/abe2602/groupie_example)
+- [Navigation with Cicerone and Dagger2](https://github.com/abe2602/cicerone_dagger)
+- [Simple Dagger2 usage](https://github.com/abe2602/dagger2_example)
+
+Thank you all, folks!
 
 ## Autor
 Bruno Abe
