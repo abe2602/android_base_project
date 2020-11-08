@@ -17,16 +17,19 @@ There's a BottomNavigation to navigate between flows, the first tab is called "H
 Using Groupie to create my RecyclerView, and RxJava to connect all interactions with components and Use Cases, there is a Paginated List in
 this tab. The Presenter will fetch data from [PokéAPI](https://pokeapi.co/), do all paginated list logic, and deal with errors and loading. 
 Once some data is fetched, it's possible do navigate to a second screen clicking in to the Pokémon Card.
+
 ![alt text](https://i.imgur.com/lTQlMCr.png)
 
 1.1 Pokémon Information Screen
 This Screen contains the Pokémon front sprite, name and an option to capture the Pokémon. If the pokémon is caught, it'll appears into the second
 tab screen. Just like the previous screen, all interactions are dealed using RxJava.
+
 ![alt text](https://i.imgur.com/bgmfQXn.png)
 
 2. Nav
 All caught pokémon will be displayed in this screen. Once the user catches a pokémon, it'll be stored into the cache using the RxPaper and this
 screen will be updated.
+
 ![alt text](https://i.imgur.com/YNeWqoK.png)
 
 ## Autor
