@@ -18,7 +18,7 @@ Using Groupie to create my RecyclerView, and RxJava to connect all interactions 
 this tab. The Presenter will fetch data from [PokéAPI](https://pokeapi.co/), do all paginated list logic, and deal with errors and loading. 
 Once some data is fetched, it's possible do navigate to a second screen clicking in to the Pokémon Card.
 <p align="center">
-  <img width="460" height="300" src="https://i.imgur.com/lTQlMCr.png">
+  <img src="https://i.imgur.com/lTQlMCr.png">
 </p>
 
 1.1 Pokémon Information Screen
