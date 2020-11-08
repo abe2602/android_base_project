@@ -45,7 +45,7 @@ If you want to understand how the navigation, dagger, or groupie works, you can 
 
 Thank you all, folks!
 
-## Autor
+## Author
 Bruno Abe
 
 ## License
