@@ -25,13 +25,17 @@ Once some data is fetched, it's possible do navigate to a second screen clicking
 This Screen contains the Pokémon front sprite, name and an option to capture the Pokémon. If the pokémon is caught, it'll appears into the second
 tab screen. Just like the previous screen, all interactions are dealed using RxJava.
 
-![alt text](https://i.imgur.com/bgmfQXn.png)
+<p align="center">
+  <img src="https://i.imgur.com/bgmfQXn.png">
+</p>
 
 2. Nav
 All caught pokémon will be displayed in this screen. Once the user catches a pokémon, it'll be stored into the cache using the RxPaper and this
 screen will be updated.
 
-![alt text](https://i.imgur.com/YNeWqoK.png)
+<p align="center">
+  <img src="https://i.imgur.com/YNeWqoK.png">
+</p>
 
 ## Autor
 Bruno Abe
