@@ -1,36 +1,22 @@
 package com.example.baseproject.presentation.common.scene
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.baseproject.R
 import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
 import com.example.baseproject.presentation.common.BackButtonListener
+import com.example.baseproject.presentation.common.ViewModelLoading
 import com.example.baseproject.presentation.common.clicks
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.loading_view.*
-import ru.terrakok.cicerone.Router
-import javax.inject.Inject
 
 abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
     DisposableHolder by DisposableHolderDelegate() {
-
-    @Inject
-    lateinit var router: Router
-
-    override val onViewCreated: PublishSubject<Unit> = PublishSubject.create<Unit>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onViewCreated.onNext(Unit)
-    }
 
     override fun displayLoading() {
         loading.visibility = View.VISIBLE
@@ -47,8 +33,18 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
         disposeAll()
     }
 
+    open fun observeLiveData() {
+        viewModel.getBaseEventsLiveData().observe(viewLifecycleOwner, Observer {
+            if (it is ViewModelLoading) {
+                displayLoading()
+            } else {
+                dismissLoading()
+            }
+        })
+    }
+
     override fun onBackPressed(): Boolean {
-        router.exit()
+        viewModel.onBackPressed()
         return true
     }
 

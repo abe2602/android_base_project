@@ -1,12 +1,15 @@
 package com.example.baseproject.presentation.common
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.baseproject.R
-import ru.terrakok.cicerone.*
+import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.Navigator
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 // Classe "pai" de todas as abas. Sempre que uma nova aba é adicionada, um novo descendente

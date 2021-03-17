@@ -1,8 +1,8 @@
 package com.example.baseproject.presentation.common
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.example.baseproject.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -45,10 +45,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavActions(){
-        supportFragmentManager.beginTransaction()
-            .add(R.id.mainFlowContainer, pokemonListFlowContainer, pokemonListTag)
-            .add(R.id.mainFlowContainer, caughtPokemonListFlowContainer, caughtPokemonListTag)
-            .commitNow()
+        if(!pokemonListFlowContainer.isAdded) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.mainFlowContainer, pokemonListFlowContainer, pokemonListTag).commitNow()
+
+            supportFragmentManager.beginTransaction()
+                .add(R.id.mainFlowContainer, caughtPokemonListFlowContainer, caughtPokemonListTag).commitNow()
+        }
 
         //Cliques na bottomNavigation
         bottomNavigationView.setOnNavigationItemSelectedListener { onNavigationItemSelected(it) }

@@ -2,8 +2,8 @@ package com.example.baseproject.presentation.common
 
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.example.baseproject.common.PerFlow
 import com.example.baseproject.R
+import com.example.baseproject.common.PerFlow
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -35,7 +35,6 @@ class FlowContainerModule(
     @Provides
     @PerFlow
     fun getRouter(cicerone: Cicerone<Router>): Router = cicerone.router
-
 }
 
 @Component(modules = [FlowContainerModule::class])

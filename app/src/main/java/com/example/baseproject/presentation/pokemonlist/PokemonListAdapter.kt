@@ -1,9 +1,9 @@
 package com.example.baseproject.presentation.pokemonlist
 
 import android.os.Handler
+import com.example.baseproject.R
 import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
-import com.example.baseproject.R
 import com.example.baseproject.presentation.common.clicks
 import com.example.domain.model.Pokemon
 import com.xwray.groupie.GroupAdapter
@@ -33,7 +33,7 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
     private var itemsSection = Section()
     private val loadingItem = LoadingItem()
     private val errorItem = ErrorItem()
-    private val receivedPokemonList: MutableList<Pokemon> = mutableListOf()
+
 
     fun setData(pokemonList: List<Pokemon>, totalFetchedItems: Int, totalItems: Int) {
         Handler().post {
@@ -41,10 +41,10 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
 
             this.totalFetchedItems = totalFetchedItems
             hasMore = totalFetchedItems <= totalItems
-            receivedPokemonList.addAll(pokemonList)
+            //receivedPokemonList.addAll(pokemonList)
 
             itemsSection = Section().apply {
-                receivedPokemonList.distinct().forEach {
+                pokemonList.distinct().forEach {
                     add(PokemonItem(pokemon = it, hasMore = hasMore))
                 }
             }

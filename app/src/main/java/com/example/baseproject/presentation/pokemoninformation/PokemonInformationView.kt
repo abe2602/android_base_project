@@ -6,28 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
+import com.example.baseproject.presentation.common.ViewModelSuccess
 import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.*
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
-import kotlinx.android.synthetic.main.fragment_pokemon_information_view.errorLayout
-import kotlinx.android.synthetic.main.fragment_pokemon_information_view.toolbar
-import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
 import kotlinx.android.synthetic.main.view_empty_state.*
 import java.util.*
 import javax.inject.Inject
 
 
-class PokemonInformationView : SceneView(), PokemonInformationUi {
-
+class PokemonInformationView : SceneView() {
     companion object {
         fun newInstance(pokemonName: String): PokemonInformationView =
             PokemonInformationView().apply {
@@ -35,25 +32,23 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
             }
     }
 
-    override val onTryAgain: PublishSubject<Unit> = PublishSubject.create<Unit>()
-    override val onReceivedPokemonName: PublishSubject<String> = PublishSubject.create<String>()
-    override val onCatchPokemon: PublishSubject<String> = PublishSubject.create<String>()
-    override val onReleasePokemon: PublishSubject<String> = PublishSubject.create<String>()
+    private val pokemonNameBundleTag: String = "pokemonNameBundle"
+    private val onCatchPokemon: PublishSubject<String> = PublishSubject.create<String>()
+    private val onReleasePokemon: PublishSubject<String> = PublishSubject.create<String>()
     private var caughtPokemon: Boolean = false
+    private var pokemonName: String? = null
 
     @Inject
-    lateinit var presenter: PokemonInformationPresenter
+    override lateinit var viewModel: PokemonInformationViewModel
 
     private val component: PokemonInformationComponent? by lazy {
         DaggerPokemonInformationComponent
             .builder()
-            .pokemonInformationModule(PokemonInformationModule(this))
+            .pokemonInformationModule(PokemonInformationModule())
             .applicationComponent((activity?.application as? MainApplication)?.applicationComponent)
             .flowContainerComponent((parentFragment as? FlowContainerFragment)?.component)
             .build()
     }
-
-    private lateinit var pokemonName: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,17 +62,61 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
         return inflater.inflate(R.layout.fragment_pokemon_information_view, container, false)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(pokemonNameBundleTag, pokemonName)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbarTitleText.text = this.pokemonName.toUpperCase(Locale.ROOT)
+        savedInstanceState?.let {
+            pokemonName = it.getString(pokemonNameBundleTag)
+        }
+
+        toolbarTitleText.text = this.pokemonName?.toUpperCase(Locale.ROOT)
         setupAppBar(toolbar as Toolbar, true, isModal = false)
 
-        onViewCreated.onNext(Unit)
-        onReceivedPokemonName.onNext(pokemonName)
+        observeLiveData()
+
+        pokemonName?.let { pokemonName ->
+            viewModel.getPokemonInformation(pokemonName)
+
+            catchPokemonButton.clicks().doOnNext {
+                if (caughtPokemon) {
+
+                    onReleasePokemon.onNext(pokemonName)
+                } else {
+                    onCatchPokemon.onNext(pokemonName)
+                }
+                caughtPokemon = !caughtPokemon
+                changeCatchButtonText(caughtPokemon)
+            }.subscribe().addTo(disposables)
+        }
     }
 
-    override fun displayPokemonInformation(pokemonInformation: PokemonInformation) {
+    override fun observeLiveData() {
+        super.observeLiveData()
+
+        with(viewModel) {
+            pokemonInformationLiveData().observe(
+                viewLifecycleOwner,
+                Observer { pokemonInformationState ->
+                    if (pokemonInformationState is ViewModelSuccess) {
+                        displayPokemonInformation(pokemonInformationState.getData())
+                    } else {
+                        displayBlockingError()
+                    }
+                })
+
+            catchPokemonLiveData().observe(viewLifecycleOwner, Observer {
+                caughtPokemon = !caughtPokemon
+                changeCatchButtonText(caughtPokemon)
+            })
+        }
+    }
+
+    private fun displayPokemonInformation(pokemonInformation: PokemonInformation) {
         val pokemonName = pokemonInformation.name
         caughtPokemon = pokemonInformation.caughtPokemon
         pokemonInformationNameText.text = pokemonName.toUpperCase(Locale.ROOT)
@@ -92,20 +131,22 @@ class PokemonInformationView : SceneView(), PokemonInformationUi {
 
         catchPokemonButton.clicks().doOnNext {
             if (caughtPokemon) {
-                onReleasePokemon.onNext(pokemonName)
+                viewModel.releasePokemon(pokemonName)
             } else {
-                onCatchPokemon.onNext(pokemonName)
+                viewModel.catchPokemon(pokemonName)
             }
-            caughtPokemon = !caughtPokemon
-            changeCatchButtonText(caughtPokemon)
         }.subscribe().addTo(disposables)
 
         dismissBlockingError()
     }
 
-    override fun displayBlockingError() {
+    private fun displayBlockingError() {
         displayBlockingError(pokemonInformationContentLayout, errorLayout)
-        actionButton.clicks().subscribe(onTryAgain)
+        tryAgainActionButton.clicks().doOnNext {
+            pokemonName?.let {
+                viewModel.getPokemonInformation(it)
+            }
+        }.subscribe().addTo(disposables)
     }
 
     private fun dismissBlockingError() {

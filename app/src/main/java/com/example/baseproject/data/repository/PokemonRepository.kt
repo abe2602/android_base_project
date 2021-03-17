@@ -2,10 +2,9 @@ package com.example.baseproject.data.repository
 
 import com.example.baseproject.common.CatchPokemonDataObservable
 import com.example.baseproject.data.cache.PokemonCDS
-import com.example.baseproject.data.remote.PokemonRDS
 import com.example.baseproject.data.mappers.toDM
+import com.example.baseproject.data.remote.PokemonRDS
 import com.example.domain.datarepository.PokemonDataRepository
-import com.example.domain.model.Pokemon
 import com.example.domain.model.PokemonInformation
 import com.example.domain.model.PokemonList
 import io.reactivex.Completable

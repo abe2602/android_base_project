@@ -1,17 +1,15 @@
 package com.example.baseproject.presentation.pokemonlist
 
+import androidx.lifecycle.ViewModelProvider
 import com.example.baseproject.common.PerScreen
 import com.example.baseproject.presentation.common.ApplicationComponent
 import com.example.baseproject.presentation.common.FlowContainerComponent
+import com.example.baseproject.presentation.common.ViewModelModule
 import dagger.Component
 import dagger.Module
-import dagger.Provides
 
-@Module
-class PokemonListModule(private val pokemonListUI: PokemonListUi) {
-    @Provides
-    fun getPokemonListView(): PokemonListUi = pokemonListUI
-}
+@Module(includes = [ViewModelModule::class])
+class PokemonListModule
 
 @PerScreen
 @Component(
@@ -19,5 +17,6 @@ class PokemonListModule(private val pokemonListUI: PokemonListUi) {
     dependencies = [FlowContainerComponent::class, ApplicationComponent::class]
 )
 interface PokemonListComponent {
+    fun provideViewModelFactory(): ViewModelProvider.Factory
     fun inject(pokemonListView: PokemonListView)
 }

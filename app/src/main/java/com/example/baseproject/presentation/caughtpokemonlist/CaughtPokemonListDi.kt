@@ -1,17 +1,15 @@
 package com.example.baseproject.presentation.caughtpokemonlist
 
+import androidx.lifecycle.ViewModelProvider
 import com.example.baseproject.common.PerScreen
 import com.example.baseproject.presentation.common.ApplicationComponent
 import com.example.baseproject.presentation.common.FlowContainerComponent
+import com.example.baseproject.presentation.common.ViewModelModule
 import dagger.Component
 import dagger.Module
-import dagger.Provides
 
-@Module
-class CaughtPokemonListModule(private val caughtPokemonListUi: CaughtPokemonListUi) {
-    @Provides
-    fun getCaughtPokemonListView(): CaughtPokemonListUi = caughtPokemonListUi
-}
+@Module(includes = [ViewModelModule::class])
+class CaughtPokemonListModule
 
 @PerScreen
 @Component(
@@ -19,5 +17,6 @@ class CaughtPokemonListModule(private val caughtPokemonListUi: CaughtPokemonList
     dependencies = [FlowContainerComponent::class, ApplicationComponent::class]
 )
 interface CaughtPokemonListComponent {
+    fun provideViewModelFactory(): ViewModelProvider.Factory
     fun inject(caughtPokemonListView: CaughtPokemonListView)
 }
