@@ -69,7 +69,7 @@ class PokemonListView : SceneView() {
         }.subscribe().addTo(disposables)
 
         pokemonListAdapter.onTryAgain.doOnNext {
-            viewModel.getNewPageLoadingLiveData()
+            viewModel.getPokemonListPage()
         }.subscribe().addTo(disposables)
 
         tryAgainActionButton.clicks().doOnNext {

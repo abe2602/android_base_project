@@ -2,12 +2,16 @@ package com.example.baseproject.presentation.pokemonlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.baseproject.presentation.common.*
 import com.example.baseproject.presentation.common.scene.SceneViewModel
 import com.example.domain.model.PokemonList
 import com.example.domain.usecase.GetPokemonListUC
 import com.example.domain.usecase.GetPokemonListUCParams
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PokemonListViewModel @Inject constructor(private var getPokemonListUC: GetPokemonListUC) :
@@ -27,30 +31,38 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
     }
 
     fun getFirstPokemonListPage() {
-        getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
-            .doOnSuccess {
-                baseEventsLiveData.postValue(ViewModelLoading<Unit>())
-                pokemonListLiveData.postValue(ViewModelSuccess(it))
-            }.doOnError {
-                pokemonListLiveData.postValue(ViewModelError(it))
-            }.doFinally {
-                baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
-            }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
+        viewModelScope.launch{
+            getPokemonListUC
+                .getFlow(GetPokemonListUCParams(limit, offset))
+                .onEach {
+                    baseEventsLiveData.postValue(ViewModelLoading<Unit>())
+                    pokemonListLiveData.postValue(ViewModelSuccess(it))
+                }.catch {
+                    pokemonListLiveData.postValue(ViewModelError(it))
+                }
+                .collect {
+                    baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
+                }
+        }
     }
 
     fun getPokemonListPage() {
-        getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
-            .doOnSuccess {
-                newPageLoadingLiveData.postValue(ViewModelLoading<Unit>())
-                totalFetchedItems = it.pokemonList.size
-                pokemonListLiveData.postValue(ViewModelSuccess(it))
-                offset = limit
-                limit += 30
-            }.doOnError {
-                newPageLoadingLiveData.postValue(ViewModelError<Unit>(it))
-            }.doFinally {
-                newPageLoadingLiveData.postValue(ViewModelDismissLoading<Unit>())
-            }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
+        viewModelScope.launch{
+            getPokemonListUC
+                .getFlow(GetPokemonListUCParams(limit, offset))
+                .onEach {
+                    newPageLoadingLiveData.postValue(ViewModelLoading<Unit>())
+                    totalFetchedItems = it.pokemonList.size
+                    pokemonListLiveData.postValue(ViewModelSuccess(it))
+                    offset = limit
+                    limit += 30
+                }.catch {
+                    newPageLoadingLiveData.postValue(ViewModelError<Unit>(it))
+                }
+                .collect {
+                    newPageLoadingLiveData.postValue(ViewModelDismissLoading<Unit>())
+                }
+        }
     }
 
     fun navigateToPokemonDetails(pokemonName: String) {

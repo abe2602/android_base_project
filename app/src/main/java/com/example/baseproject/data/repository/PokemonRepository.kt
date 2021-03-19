@@ -10,6 +10,8 @@ import com.example.domain.model.PokemonList
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class PokemonRepository @Inject constructor(
@@ -18,10 +20,13 @@ class PokemonRepository @Inject constructor(
     @CatchPokemonDataObservable private val catchPokemonDataObservable: PublishSubject<Unit>
 ) : PokemonDataRepository {
 
-    override fun getPokemonList(limit: Int, offset: Int): Single<PokemonList> =
-        pokemonRDS.getPokemonList(limit, offset).map {
-            it.toDM()
+    override suspend fun getPokemonList(limit: Int, offset: Int): Flow<PokemonList> {
+        return flow {
+            val pokemonList = pokemonRDS.getPokemonList(limit, offset)
+
+            emit(pokemonList.toDM())
         }
+    }
 
     override fun getPokemonInformation(pokemonName: String): Single<PokemonInformation> =
         getCaughtPokemonList().flatMap { caughtPokemonList ->

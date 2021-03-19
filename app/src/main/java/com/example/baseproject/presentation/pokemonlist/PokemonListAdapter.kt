@@ -41,7 +41,6 @@ class PokemonListAdapter : GroupAdapter<GroupieViewHolder>() {
 
             this.totalFetchedItems = totalFetchedItems
             hasMore = totalFetchedItems <= totalItems
-            //receivedPokemonList.addAll(pokemonList)
 
             itemsSection = Section().apply {
                 pokemonList.distinct().forEach {
