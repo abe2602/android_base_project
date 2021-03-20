@@ -12,9 +12,9 @@ import javax.inject.Inject
 abstract class SceneViewModel : ViewModel(), DisposableHolder by DisposableHolderDelegate() {
     @Inject
     lateinit var router: Router
-    protected val baseEventsLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
+    protected val baseEventsMutableLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
 
-    fun getBaseEventsLiveData(): LiveData<StateEvent<*>> = baseEventsLiveData
+    val baseEventsLiveData: LiveData<StateEvent<*>> = baseEventsMutableLiveData
 
     open fun onBackPressed() {
         router.exit()

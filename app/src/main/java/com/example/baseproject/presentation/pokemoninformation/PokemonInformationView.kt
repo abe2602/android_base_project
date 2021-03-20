@@ -99,7 +99,7 @@ class PokemonInformationView : SceneView() {
         super.observeLiveData()
 
         with(viewModel) {
-            pokemonInformationLiveData().observe(
+            pokemonInformationLiveData.observe(
                 viewLifecycleOwner,
                 Observer { pokemonInformationState ->
                     if (pokemonInformationState is ViewModelSuccess) {
@@ -109,7 +109,7 @@ class PokemonInformationView : SceneView() {
                     }
                 })
 
-            catchPokemonLiveData().observe(viewLifecycleOwner, Observer {
+            catchPokemonLiveData.observe(viewLifecycleOwner, Observer {
                 caughtPokemon = !caughtPokemon
                 changeCatchButtonText(caughtPokemon)
             })

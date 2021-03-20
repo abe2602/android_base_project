@@ -12,5 +12,5 @@ interface PokemonRDS {
     suspend fun getPokemonList(@Query("limit") limit: Int, @Query("offset") offset: Int): PokemonListRM
 
     @GET("pokemon/{pokemonName}")
-    fun getPokemonInformation(@Path("pokemonName") pokemonName: String): Single<PokemonInformationRM>
+    suspend fun getPokemonInformation(@Path("pokemonName") pokemonName: String): PokemonInformationRM
 }

@@ -28,12 +28,12 @@ class PokemonRepository @Inject constructor(
         }
     }
 
-    override fun getPokemonInformation(pokemonName: String): Single<PokemonInformation> =
-        getCaughtPokemonList().flatMap { caughtPokemonList ->
-            pokemonRDS.getPokemonInformation(pokemonName).map {
-                it.toDM(caughtPokemonList.contains(it.name))
-            }
+    override fun getPokemonInformation(pokemonName: String): Flow<PokemonInformation> {
+        return flow {
+            val pokemonInformation = pokemonRDS.getPokemonInformation(pokemonName)
+            emit(pokemonInformation.toDM(false))
         }
+    }
 
     override fun catchPokemon(pokemonName: String): Completable = pokemonCDS.getCaughtPokemonList()
         .flatMapCompletable { caughtPokemonList ->

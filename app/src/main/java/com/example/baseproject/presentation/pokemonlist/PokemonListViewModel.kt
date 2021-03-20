@@ -16,11 +16,11 @@ import javax.inject.Inject
 
 class PokemonListViewModel @Inject constructor(private var getPokemonListUC: GetPokemonListUC) :
     SceneViewModel() {
-    private val pokemonListLiveData = MutableLiveData<StateEvent<PokemonList>>()
-    fun getPokemonListLiveData(): LiveData<StateEvent<PokemonList>> = pokemonListLiveData
+    private val pokemonListMutableLiveData = MutableLiveData<StateEvent<PokemonList>>()
+    val pokemonListLiveData: LiveData<StateEvent<PokemonList>> = pokemonListMutableLiveData
 
-    private val newPageLoadingLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
-    fun getNewPageLoadingLiveData(): LiveData<StateEvent<*>> = newPageLoadingLiveData
+    private val newPageLoadingMutableLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
+    val newPageLoadingLiveData: LiveData<StateEvent<*>> = newPageLoadingMutableLiveData
 
     private var limit: Int = 30
     private var offset: Int = 0
@@ -35,13 +35,13 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
             getPokemonListUC
                 .getFlow(GetPokemonListUCParams(limit, offset))
                 .onEach {
-                    baseEventsLiveData.postValue(ViewModelLoading<Unit>())
-                    pokemonListLiveData.postValue(ViewModelSuccess(it))
+                    baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
+                    pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
                 }.catch {
-                    pokemonListLiveData.postValue(ViewModelError(it))
+                    pokemonListMutableLiveData.postValue(ViewModelError(it))
                 }
                 .collect {
-                    baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
+                    baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
                 }
         }
     }
@@ -51,16 +51,16 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
             getPokemonListUC
                 .getFlow(GetPokemonListUCParams(limit, offset))
                 .onEach {
-                    newPageLoadingLiveData.postValue(ViewModelLoading<Unit>())
+                    newPageLoadingMutableLiveData.postValue(ViewModelLoading<Unit>())
                     totalFetchedItems = it.pokemonList.size
-                    pokemonListLiveData.postValue(ViewModelSuccess(it))
+                    pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
                     offset = limit
                     limit += 30
                 }.catch {
-                    newPageLoadingLiveData.postValue(ViewModelError<Unit>(it))
+                    newPageLoadingMutableLiveData.postValue(ViewModelError<Unit>(it))
                 }
                 .collect {
-                    newPageLoadingLiveData.postValue(ViewModelDismissLoading<Unit>())
+                    newPageLoadingMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
                 }
         }
     }

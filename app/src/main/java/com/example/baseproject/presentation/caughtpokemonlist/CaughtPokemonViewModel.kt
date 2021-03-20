@@ -22,7 +22,7 @@ class CaughtPokemonViewModel @Inject constructor(
     fun caughtPokemonListLiveData(): LiveData<StateEvent<List<String>>> = caughtPokemonListLiveData
 
     init {
-        baseEventsLiveData.postValue(ViewModelLoading<Unit>())
+        baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
         getCaughtPokemonList()
     }
 
@@ -31,7 +31,7 @@ class CaughtPokemonViewModel @Inject constructor(
             getCaughtPokemonListUC.getSingle(Unit).doOnSuccess {
                 caughtPokemonListLiveData.postValue(ViewModelSuccess(it))
             }.doFinally {
-                baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
+                baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }
         }.subscribe().addTo(disposables)
     }
