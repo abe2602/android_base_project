@@ -1,4 +1,4 @@
-# Android MVP Implementation
+# Android MVVM with RxJava and LiveData Implementation
 
 ## Libraries
 - [Groupie](https://github.com/lisawray/groupie)
@@ -10,7 +10,7 @@
 - [Glide](https://github.com/bumptech/glide)
 
 ## What's happening?
-This is MY MVP Android implementation! I tried to create an example project using MVP + Clean Architecture to work as base to new projects.
+This is MY MVVM Android implementation! I tried to create an example project using MVVM + Clean Architecture to work as base to new projects.
 There's a BottomNavigation to navigate between flows, the first tab is called "Home", and the second one "Nav".
 
 1. Home
