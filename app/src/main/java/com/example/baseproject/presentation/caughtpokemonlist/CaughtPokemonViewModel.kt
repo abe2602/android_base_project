@@ -17,9 +17,8 @@ class CaughtPokemonViewModel @Inject constructor(
     private val getCaughtPokemonListUC: GetCaughtPokemonListUC,
     @CatchPokemonDataObservable private val catchPokemonDataObservable: Observable<Unit>
 ) : SceneViewModel() {
-
-    private val caughtPokemonListLiveData = MutableLiveData<StateEvent<List<String>>>()
-    fun caughtPokemonListLiveData(): LiveData<StateEvent<List<String>>> = caughtPokemonListLiveData
+    private val caughtPokemonListMutableLiveData = MutableLiveData<StateEvent<List<String>>>()
+    val caughtPokemonListLiveData: LiveData<StateEvent<List<String>>> = caughtPokemonListMutableLiveData
 
     init {
         baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
@@ -29,7 +28,7 @@ class CaughtPokemonViewModel @Inject constructor(
     private fun getCaughtPokemonList() {
         Observable.merge(catchPokemonDataObservable, Observable.just(Unit)).flatMapSingle {
             getCaughtPokemonListUC.getSingle(Unit).doOnSuccess {
-                caughtPokemonListLiveData.postValue(ViewModelSuccess(it))
+                caughtPokemonListMutableLiveData.postValue(ViewModelSuccess(it))
             }.doFinally {
                 baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }
