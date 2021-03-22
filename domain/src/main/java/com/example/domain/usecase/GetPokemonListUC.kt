@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetPokemonListUC @Inject constructor(
-    @BackgroundScheduler backgroundScheduler: Scheduler,
-    @MainScheduler mainScheduler: Scheduler,
     private val pokemonRepository: PokemonDataRepository
 ) : FlowUseCase<GetPokemonListUCParams, PokemonList>() {
     override suspend fun getRawFlow(params: GetPokemonListUCParams): Flow<PokemonList> =

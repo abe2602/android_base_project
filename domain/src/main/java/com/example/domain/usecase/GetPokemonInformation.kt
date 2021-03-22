@@ -10,8 +10,7 @@ import javax.inject.Inject
 
 class GetPokemonInformationUC @Inject constructor(
     private val pokemonRepository: PokemonDataRepository
-) : FlowUseCase<GetPokemonInformationParamsUC, PokemonInformation>(
-) {
+) : FlowUseCase<GetPokemonInformationParamsUC, PokemonInformation>() {
     override suspend fun getRawFlow(params: GetPokemonInformationParamsUC): Flow<PokemonInformation> =
         pokemonRepository.getPokemonInformation(params.pokemonName)
 }

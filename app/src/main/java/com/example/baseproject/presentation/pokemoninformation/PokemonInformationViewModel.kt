@@ -11,6 +11,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +31,6 @@ class PokemonInformationViewModel @Inject constructor(
     }
 
     fun getPokemonInformation(pokemonName: String) {
-
         viewModelScope.launch {
             getPokemonInformationUC.getFlow(GetPokemonInformationParamsUC(pokemonName))
                 .onEach { pokemonInformation ->
@@ -44,18 +44,24 @@ class PokemonInformationViewModel @Inject constructor(
     }
 
     fun catchPokemon(pokemonName: String) {
-        catchPokemonUC.getCompletable(CatchPokemonParamsUC(pokemonName = pokemonName))
-            .doOnComplete {
-                catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
-            }.subscribe()
-            .addTo(disposables)
+        viewModelScope.launch {
+            catchPokemonUC
+                .getFlow(CatchPokemonParamsUC(pokemonName = pokemonName))
+                .take(1)
+                .collect {
+                    catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
+                }
+        }
     }
 
     fun releasePokemon(pokemonName: String) {
-        releasePokemonUC.getCompletable(ReleasePokemonUCParams(pokemonName = pokemonName))
-            .doOnComplete {
-                catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
-            }.subscribe()
-            .addTo(disposables)
+        viewModelScope.launch {
+            releasePokemonUC
+                .getFlow(ReleasePokemonUCParams(pokemonName = pokemonName))
+                .take(1)
+                .collect {
+                    catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
+                }
+        }
     }
 }

@@ -84,7 +84,6 @@ class PokemonInformationView : SceneView() {
 
             catchPokemonButton.clicks().doOnNext {
                 if (caughtPokemon) {
-
                     onReleasePokemon.onNext(pokemonName)
                 } else {
                     onCatchPokemon.onNext(pokemonName)

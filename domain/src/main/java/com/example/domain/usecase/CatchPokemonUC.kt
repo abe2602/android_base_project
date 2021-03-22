@@ -1,20 +1,17 @@
 package com.example.domain.usecase
 
 import com.example.domain.datarepository.PokemonDataRepository
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CatchPokemonUC @Inject constructor(
-    @BackgroundScheduler backgroundScheduler: Scheduler,
-    @MainScheduler mainScheduler: Scheduler,
     private val pokemonRepository: PokemonDataRepository
-) : CompletableUseCase<CatchPokemonParamsUC>(
-    observeOn = mainScheduler,
-    subscribeOn = backgroundScheduler
-) {
-    override fun getRawCompletable(params: CatchPokemonParamsUC): Completable =
-        pokemonRepository.catchPokemon(params.pokemonName)
+) : FlowUseCase<CatchPokemonParamsUC, Unit>() {
+
+    override suspend fun getRawFlow(params: CatchPokemonParamsUC) : Flow<Unit>{
+        return pokemonRepository.catchPokemon(params.pokemonName)
+    }
+
 }
 
 data class CatchPokemonParamsUC(val pokemonName: String)

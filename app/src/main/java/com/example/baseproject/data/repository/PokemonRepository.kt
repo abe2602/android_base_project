@@ -1,59 +1,52 @@
 package com.example.baseproject.data.repository
 
-import com.example.baseproject.common.CatchPokemonDataObservable
-import com.example.baseproject.data.cache.PokemonCDS
+import com.example.baseproject.data.cache.PokemonCdsDao
+import com.example.baseproject.data.cache.model.PokemonCM
 import com.example.baseproject.data.mappers.toDM
 import com.example.baseproject.data.remote.PokemonRDS
 import com.example.domain.datarepository.PokemonDataRepository
 import com.example.domain.model.PokemonInformation
 import com.example.domain.model.PokemonList
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class PokemonRepository @Inject constructor(
     private val pokemonRDS: PokemonRDS,
-    private val pokemonCDS: PokemonCDS,
-    @CatchPokemonDataObservable private val catchPokemonDataObservable: PublishSubject<Unit>
+    private val pokemonCdsDao: PokemonCdsDao,
 ) : PokemonDataRepository {
 
-    override suspend fun getPokemonList(limit: Int, offset: Int): Flow<PokemonList> {
-        return flow {
+    override suspend fun getPokemonList(limit: Int, offset: Int): Flow<PokemonList> =
+        flow {
             val pokemonList = pokemonRDS.getPokemonList(limit, offset)
 
             emit(pokemonList.toDM())
         }
-    }
 
-    override fun getPokemonInformation(pokemonName: String): Flow<PokemonInformation> {
-        return flow {
-            val pokemonInformation = pokemonRDS.getPokemonInformation(pokemonName)
-            emit(pokemonInformation.toDM(false))
-        }
-    }
-
-    override fun catchPokemon(pokemonName: String): Completable = pokemonCDS.getCaughtPokemonList()
-        .flatMapCompletable { caughtPokemonList ->
-            caughtPokemonList.add(pokemonName)
-            pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
-        }.doOnComplete {
-            catchPokemonDataObservable.onNext(Unit)
-        }
-
-    override fun releasePokemon(pokemonName: String): Completable =
-        pokemonCDS.getCaughtPokemonList()
-            .flatMapCompletable { caughtPokemonList ->
-                caughtPokemonList.remove(pokemonName)
-                pokemonCDS.upsertCaughtPokemon(caughtPokemonList)
-            }.doOnComplete {
-                catchPokemonDataObservable.onNext(Unit)
+    override suspend fun getPokemonInformation(pokemonName: String): Flow<PokemonInformation> =
+        getCaughtPokemonList().flatMapMerge { caughtPokemonList ->
+            return@flatMapMerge flow {
+                val pokemonInformation = pokemonRDS.getPokemonInformation(pokemonName)
+                emit(pokemonInformation.toDM(caughtPokemonList.contains(pokemonInformation.name)))
             }
+        }
 
-    override fun getCaughtPokemonList(): Single<List<String>> =
-        pokemonCDS.getCaughtPokemonList().map {
-            it.toList()
+    override suspend fun catchPokemon(pokemonName: String): Flow<Unit> {
+        return pokemonCdsDao.getPokemonList().map {
+            val newPokemonList = it.toMutableList()
+            newPokemonList.add(PokemonCM(pokemonName))
+            pokemonCdsDao.upsertPokemonList(newPokemonList)
+        }
+    }
+
+
+    override suspend fun releasePokemon(pokemonName: String): Flow<Unit > = flow {
+        pokemonCdsDao.deletePokemonFromList(PokemonCM(pokemonName))
+        emit(Unit)
+    }
+
+    override suspend fun getCaughtPokemonList(): Flow<List<String>> = pokemonCdsDao.getPokemonList()
+        .map {
+            it.map { pokemon -> pokemon.name }
         }
 }

@@ -7,12 +7,7 @@ class MainApplication: Application() {
     val applicationComponent: ApplicationComponent by lazy {
         DaggerApplicationComponent
             .builder()
-            .applicationModule(ApplicationModule())
+            .applicationModule(ApplicationModule(this))
             .build()
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        RxPaperBook.init(this)
     }
 }
