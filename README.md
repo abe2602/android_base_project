@@ -4,17 +4,16 @@
 - [Groupie](https://github.com/lisawray/groupie)
 - [Cicerone](https://github.com/terrakok/Cicerone)
 - [Dagger2](https://github.com/google/dagger)
-- [RxJava](https://github.com/ReactiveX/RxJava)
-- [RxPaper](https://github.com/pakoito/RxPaper)
-- [RxBinding](https://github.com/JakeWharton/RxBinding)
+- [Kotlin Flow](https://github.com/ReactiveX/RxJava)
+- [Room](https://github.com/pakoito/RxPaper)
 - [Glide](https://github.com/bumptech/glide)
 
 ## What's happening?
-This is MY MVP Android implementation! I tried to create an example project using MVP + Clean Architecture to work as base to new projects.
+This is MY MVVM Android implementation! I tried to create an example project using MVVM + Clean Architecture to work as base to new projects.
 There's a BottomNavigation to navigate between flows, the first tab is called "Home", and the second one "Nav".
 
 1. Home
-Using Groupie to create my RecyclerView, and RxJava to connect all interactions with components and Use Cases, there is a Paginated List in
+Using Groupie to create my RecyclerView, and Kotlin Flow to connect all interactions with components and Use Cases, there is a Paginated List in
 this tab. The Presenter will fetch data from [PokéAPI](https://pokeapi.co/), do all paginated list logic, and deal with errors and loading. 
 Once some data is fetched, it's possible do navigate to a second screen clicking in to the Pokémon Card.
 <p align="center">
