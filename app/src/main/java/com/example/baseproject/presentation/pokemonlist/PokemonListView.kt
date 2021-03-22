@@ -69,7 +69,7 @@ class PokemonListView : SceneView() {
         }.subscribe().addTo(disposables)
 
         pokemonListAdapter.onTryAgain.doOnNext {
-            viewModel.getNewPageLoadingLiveData()
+            viewModel.getPokemonListPage()
         }.subscribe().addTo(disposables)
 
         tryAgainActionButton.clicks().doOnNext {
@@ -86,7 +86,7 @@ class PokemonListView : SceneView() {
         super.observeLiveData()
 
         with(viewModel) {
-            getPokemonListLiveData().observe(viewLifecycleOwner, Observer { pokemonListState ->
+            pokemonListLiveData.observe(viewLifecycleOwner, Observer { pokemonListState ->
                 if (pokemonListState is ViewModelSuccess) {
                     val pokemonListData = pokemonListState.getData()
                     dismissBlockingError(pokemonListRecyclerView, errorLayout)
@@ -97,7 +97,7 @@ class PokemonListView : SceneView() {
                 }
             })
 
-            getNewPageLoadingLiveData().observe(viewLifecycleOwner, Observer { pokemonListPaginationState ->
+            newPageLoadingLiveData.observe(viewLifecycleOwner, Observer { pokemonListPaginationState ->
                 if (pokemonListPaginationState is ViewModelLoading) {
                     pokemonListAdapter.addNewPageLoading()
                 } else {

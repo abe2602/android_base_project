@@ -12,11 +12,11 @@ import javax.inject.Inject
 
 class PokemonListViewModel @Inject constructor(private var getPokemonListUC: GetPokemonListUC) :
     SceneViewModel() {
-    private val pokemonListLiveData = MutableLiveData<StateEvent<PokemonList>>()
-    fun getPokemonListLiveData(): LiveData<StateEvent<PokemonList>> = pokemonListLiveData
+    private val pokemonListMutableLiveData = MutableLiveData<StateEvent<PokemonList>>()
+    val pokemonListLiveData: LiveData<StateEvent<PokemonList>> = pokemonListMutableLiveData
 
-    private val newPageLoadingLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
-    fun getNewPageLoadingLiveData(): LiveData<StateEvent<*>> = newPageLoadingLiveData
+    private val newPageLoadingMutableLiveData: MutableLiveData<StateEvent<*>> = MutableLiveData()
+    val newPageLoadingLiveData: LiveData<StateEvent<*>> = newPageLoadingMutableLiveData
 
     private var limit: Int = 30
     private var offset: Int = 0
@@ -29,27 +29,27 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
     fun getFirstPokemonListPage() {
         getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
             .doOnSuccess {
-                baseEventsLiveData.postValue(ViewModelLoading<Unit>())
-                pokemonListLiveData.postValue(ViewModelSuccess(it))
+                baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
+                pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
             }.doOnError {
-                pokemonListLiveData.postValue(ViewModelError(it))
+                pokemonListMutableLiveData.postValue(ViewModelError(it))
             }.doFinally {
-                baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
+                baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
     }
 
     fun getPokemonListPage() {
         getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
             .doOnSuccess {
-                newPageLoadingLiveData.postValue(ViewModelLoading<Unit>())
+                newPageLoadingMutableLiveData.postValue(ViewModelLoading<Unit>())
                 totalFetchedItems = it.pokemonList.size
-                pokemonListLiveData.postValue(ViewModelSuccess(it))
+                pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
                 offset = limit
                 limit += 30
             }.doOnError {
-                newPageLoadingLiveData.postValue(ViewModelError<Unit>(it))
+                newPageLoadingMutableLiveData.postValue(ViewModelError<Unit>(it))
             }.doFinally {
-                newPageLoadingLiveData.postValue(ViewModelDismissLoading<Unit>())
+                newPageLoadingMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
     }
 

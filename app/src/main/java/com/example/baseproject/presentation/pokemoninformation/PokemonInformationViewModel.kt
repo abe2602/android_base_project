@@ -14,31 +14,31 @@ class PokemonInformationViewModel @Inject constructor(
     private val catchPokemonUC: CatchPokemonUC,
     private val releasePokemonUC: ReleasePokemonUC
 ) : SceneViewModel() {
-    private val pokemonInformationLiveData = MutableLiveData<StateEvent<PokemonInformation>>()
-    fun pokemonInformationLiveData(): LiveData<StateEvent<PokemonInformation>> = pokemonInformationLiveData
+    private val pokemonInformationMutableLiveData = MutableLiveData<StateEvent<PokemonInformation>>()
+    val pokemonInformationLiveData: LiveData<StateEvent<PokemonInformation>> = pokemonInformationMutableLiveData
 
-    private val catchPokemonLiveData = MutableLiveData<StateEvent<Unit>>()
-    fun catchPokemonLiveData(): LiveData<StateEvent<Unit>> = catchPokemonLiveData
+    private val catchPokemonMutableLiveData = MutableLiveData<StateEvent<Unit>>()
+    val catchPokemonLiveData: LiveData<StateEvent<Unit>> = catchPokemonMutableLiveData
 
     init {
-        baseEventsLiveData.postValue(ViewModelLoading<Unit>())
+        baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
     }
 
     fun getPokemonInformation(pokemonName: String) {
         getPokemonInformationUC.getSingle(GetPokemonInformationParamsUC(pokemonName))
             .doOnSuccess { pokemonInformation ->
-                pokemonInformationLiveData.postValue(ViewModelSuccess<PokemonInformation>(pokemonInformation))
+                pokemonInformationMutableLiveData.postValue(ViewModelSuccess<PokemonInformation>(pokemonInformation))
             }.doOnError {
-                pokemonInformationLiveData.postValue(ViewModelError(it))
+                pokemonInformationMutableLiveData.postValue(ViewModelError(it))
             }.doFinally {
-                baseEventsLiveData.postValue(ViewModelDismissLoading<Unit>())
+                baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
     }
 
     fun catchPokemon(pokemonName: String) {
         catchPokemonUC.getCompletable(CatchPokemonParamsUC(pokemonName = pokemonName))
             .doOnComplete {
-                catchPokemonLiveData.postValue(ViewModelSuccess(Unit))
+                catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
             }.subscribe()
             .addTo(disposables)
     }
@@ -46,7 +46,7 @@ class PokemonInformationViewModel @Inject constructor(
     fun releasePokemon(pokemonName: String) {
         releasePokemonUC.getCompletable(ReleasePokemonUCParams(pokemonName = pokemonName))
             .doOnComplete {
-                catchPokemonLiveData.postValue(ViewModelSuccess(Unit))
+                catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
             }.subscribe()
             .addTo(disposables)
     }
