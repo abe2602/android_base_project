@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
 import com.example.baseproject.presentation.common.ViewModelSuccess
-import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.PokemonInformation
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_pokemon_information_view.*
 import kotlinx.android.synthetic.main.toolbar_view.*
@@ -82,7 +79,7 @@ class PokemonInformationView : SceneView() {
         pokemonName?.let { pokemonName ->
             viewModel.getPokemonInformation(pokemonName)
 
-            catchPokemonButton.clicks().doOnNext {
+            catchPokemonButton.setOnClickListener {
                 if (caughtPokemon) {
                     onReleasePokemon.onNext(pokemonName)
                 } else {
@@ -90,7 +87,7 @@ class PokemonInformationView : SceneView() {
                 }
                 caughtPokemon = !caughtPokemon
                 changeCatchButtonText(caughtPokemon)
-            }.subscribe().addTo(disposables)
+            }
         }
     }
 
@@ -99,8 +96,7 @@ class PokemonInformationView : SceneView() {
 
         with(viewModel) {
             pokemonInformationLiveData.observe(
-                viewLifecycleOwner,
-                Observer { pokemonInformationState ->
+                viewLifecycleOwner, { pokemonInformationState ->
                     if (pokemonInformationState is ViewModelSuccess) {
                         displayPokemonInformation(pokemonInformationState.getData())
                     } else {
@@ -108,7 +104,7 @@ class PokemonInformationView : SceneView() {
                     }
                 })
 
-            catchPokemonLiveData.observe(viewLifecycleOwner, Observer {
+            catchPokemonLiveData.observe(viewLifecycleOwner, {
                 caughtPokemon = !caughtPokemon
                 changeCatchButtonText(caughtPokemon)
             })
@@ -128,24 +124,24 @@ class PokemonInformationView : SceneView() {
                 .into(frontImage)
         }
 
-        catchPokemonButton.clicks().doOnNext {
+        catchPokemonButton.setOnClickListener {
             if (caughtPokemon) {
                 viewModel.releasePokemon(pokemonName)
             } else {
                 viewModel.catchPokemon(pokemonName)
             }
-        }.subscribe().addTo(disposables)
+        }
 
         dismissBlockingError()
     }
 
     private fun displayBlockingError() {
         displayBlockingError(pokemonInformationContentLayout, errorLayout)
-        tryAgainActionButton.clicks().doOnNext {
+        tryAgainActionButton.setOnClickListener{
             pokemonName?.let {
                 viewModel.getPokemonInformation(it)
             }
-        }.subscribe().addTo(disposables)
+        }
     }
 
     private fun dismissBlockingError() {

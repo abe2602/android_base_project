@@ -29,7 +29,7 @@ class CaughtPokemonViewModel @Inject constructor(
         getCaughtPokemonList()
     }
 
-    private fun getCaughtPokemonList() {
+    fun getCaughtPokemonList() {
         viewModelScope.launch {
             getCaughtPokemonListUC.getFlow(Unit).onEach {
                 caughtPokemonListLiveData.postValue(ViewModelSuccess(it))

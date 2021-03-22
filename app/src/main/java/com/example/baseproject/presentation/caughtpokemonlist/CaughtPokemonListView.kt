@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.FlowContainerFragment
 import com.example.baseproject.presentation.common.MainApplication
 import com.example.baseproject.presentation.common.ViewModelSuccess
-import com.example.baseproject.presentation.common.clicks
 import com.example.baseproject.presentation.common.scene.SceneView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_caught_pokemon_list_view.*
@@ -66,7 +64,7 @@ class CaughtPokemonListView : SceneView() {
     override fun observeLiveData() {
         super.observeLiveData()
 
-        viewModel.caughtPokemonListLiveData().observe(viewLifecycleOwner, Observer { caughtPokemonListState ->
+        viewModel.caughtPokemonListLiveData().observe(viewLifecycleOwner, { caughtPokemonListState ->
             if (caughtPokemonListState is ViewModelSuccess) {
                 val caughtPokemonList = caughtPokemonListState.getData()
 
@@ -90,7 +88,9 @@ class CaughtPokemonListView : SceneView() {
 
     private fun displayBlockingError() {
         displayBlockingError(caughtPokemonListRecyclerView, errorLayout)
-        tryAgainActionButton.clicks().subscribe(onTryAgain)
+        tryAgainActionButton.setOnClickListener {
+            viewModel.getCaughtPokemonList()
+        }
     }
 
     private fun displayNoCaughtPokemonError() {
@@ -107,5 +107,4 @@ class CaughtPokemonListView : SceneView() {
         caughtPokemonListRecyclerView.layoutManager = LinearLayoutManager(context)
         caughtPokemonListRecyclerView.adapter = caughtPokemonListAdapter
     }
-
 }
