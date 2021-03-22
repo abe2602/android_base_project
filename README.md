@@ -1,4 +1,4 @@
-# Android MVP Implementation
+# Android MVVM with Kotlin Flow and LiveData Implementation
 
 ## Libraries
 - [Groupie](https://github.com/lisawray/groupie)
