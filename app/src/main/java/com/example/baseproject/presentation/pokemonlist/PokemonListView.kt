@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.baseproject.R
 import com.example.baseproject.presentation.common.*
 import com.example.baseproject.presentation.common.scene.SceneView
 import com.example.domain.model.Pokemon
-import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.frament_pokemon_list.*
 import kotlinx.android.synthetic.main.toolbar_view.*
 import kotlinx.android.synthetic.main.view_empty_state.*
@@ -42,7 +40,8 @@ class PokemonListView : SceneView() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         component?.inject(this)
-        pokemonListAdapter = PokemonListAdapter()
+
+        pokemonListAdapter = PokemonListAdapter(::navigateToDetails, ::getNewPage, ::getNewPage)
     }
 
     override fun onCreateView(
@@ -60,21 +59,17 @@ class PokemonListView : SceneView() {
         setupRecyclerView()
         observeLiveData()
 
-        pokemonListAdapter.onRequestMoreItems.doOnNext {
-            viewModel.getPokemonListPage()
-        }.subscribe().addTo(disposables)
-
-        pokemonListAdapter.onChoosePokemon.doOnNext {
-            viewModel.navigateToPokemonDetails(it)
-        }.subscribe().addTo(disposables)
-
-        pokemonListAdapter.onTryAgain.doOnNext {
-            viewModel.getPokemonListPage()
-        }.subscribe().addTo(disposables)
-
-        tryAgainActionButton.clicks().doOnNext {
+        tryAgainActionButton.setOnClickListener {
             viewModel.getFirstPokemonListPage()
-        }.subscribe().addTo(disposables)
+        }
+    }
+
+    private fun navigateToDetails(pokemonName: String) {
+        viewModel.navigateToPokemonDetails(pokemonName)
+    }
+
+    private fun getNewPage() {
+        viewModel.getPokemonListPage()
     }
 
     private fun setupRecyclerView() {
@@ -86,7 +81,7 @@ class PokemonListView : SceneView() {
         super.observeLiveData()
 
         with(viewModel) {
-            pokemonListLiveData.observe(viewLifecycleOwner, Observer { pokemonListState ->
+            pokemonListLiveData.observe(viewLifecycleOwner, { pokemonListState ->
                 if (pokemonListState is ViewModelSuccess) {
                     val pokemonListData = pokemonListState.getData()
                     dismissBlockingError(pokemonListRecyclerView, errorLayout)
@@ -97,7 +92,7 @@ class PokemonListView : SceneView() {
                 }
             })
 
-            newPageLoadingLiveData.observe(viewLifecycleOwner, Observer { pokemonListPaginationState ->
+            newPageLoadingLiveData.observe(viewLifecycleOwner, { pokemonListPaginationState ->
                 if (pokemonListPaginationState is ViewModelLoading) {
                     pokemonListAdapter.addNewPageLoading()
                 } else {

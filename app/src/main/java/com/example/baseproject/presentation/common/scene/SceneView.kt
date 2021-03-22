@@ -11,8 +11,6 @@ import com.example.baseproject.common.DisposableHolder
 import com.example.baseproject.common.DisposableHolderDelegate
 import com.example.baseproject.presentation.common.BackButtonListener
 import com.example.baseproject.presentation.common.ViewModelLoading
-import com.example.baseproject.presentation.common.clicks
-import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.loading_view.*
 
 abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
@@ -60,9 +58,9 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
                 toolbar.setNavigationIcon(R.drawable.ic_back)
             }
 
-            toolbar.clicks().doOnNext {
+            toolbar.setOnClickListener {
                 onBackPressed()
-            }.subscribe().addTo(disposables)
+            }
         }
     }
 

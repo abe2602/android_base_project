@@ -7,7 +7,6 @@ import com.example.baseproject.presentation.common.*
 import com.example.baseproject.presentation.common.scene.SceneViewModel
 import com.example.domain.model.PokemonInformation
 import com.example.domain.usecase.*
-import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
