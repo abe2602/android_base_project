@@ -18,8 +18,8 @@ class CaughtPokemonViewModel @Inject constructor(
     private val getCaughtPokemonListUC: GetCaughtPokemonListUC,
 ) : SceneViewModel() {
 
-    private val caughtPokemonListLiveData = MutableLiveData<StateEvent<List<String>>>()
-    fun caughtPokemonListLiveData(): LiveData<StateEvent<List<String>>> = caughtPokemonListLiveData
+    private val caughtPokemonListMutableLiveData = MutableLiveData<StateEvent<List<String>>>()
+    val caughtPokemonListLiveData: LiveData<StateEvent<List<String>>> = caughtPokemonListMutableLiveData
 
     init {
         baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
@@ -29,7 +29,7 @@ class CaughtPokemonViewModel @Inject constructor(
     fun getCaughtPokemonList() {
         viewModelScope.launch {
             getCaughtPokemonListUC.getFlow(Unit).onEach {
-                caughtPokemonListLiveData.postValue(ViewModelSuccess(it))
+                caughtPokemonListMutableLiveData.postValue(ViewModelSuccess(it))
             }.collect {
                 baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
             }

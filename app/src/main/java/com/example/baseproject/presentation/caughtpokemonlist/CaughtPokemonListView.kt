@@ -64,7 +64,7 @@ class CaughtPokemonListView : SceneView() {
     override fun observeLiveData() {
         super.observeLiveData()
 
-        viewModel.caughtPokemonListLiveData().observe(viewLifecycleOwner, { caughtPokemonListState ->
+        viewModel.caughtPokemonListLiveData.observe(viewLifecycleOwner, { caughtPokemonListState ->
             if (caughtPokemonListState is ViewModelSuccess) {
                 val caughtPokemonList = caughtPokemonListState.getData()
 
