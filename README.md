@@ -4,8 +4,8 @@
 - [Groupie](https://github.com/lisawray/groupie)
 - [Cicerone](https://github.com/terrakok/Cicerone)
 - [Dagger2](https://github.com/google/dagger)
-- [Kotlin Flow](https://github.com/ReactiveX/RxJava)
-- [Room](https://github.com/pakoito/RxPaper)
+- [Kotlin Flow](https://developer.android.com/kotlin/flow)
+- [Room](https://developer.android.com/jetpack/androidx/releases/room)
 - [Glide](https://github.com/bumptech/glide)
 
 ## What's happening?
