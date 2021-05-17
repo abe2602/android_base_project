@@ -107,5 +107,4 @@ class CaughtPokemonListView : SceneView() {
         caughtPokemonListRecyclerView.layoutManager = LinearLayoutManager(context)
         caughtPokemonListRecyclerView.adapter = caughtPokemonListAdapter
     }
-
 }

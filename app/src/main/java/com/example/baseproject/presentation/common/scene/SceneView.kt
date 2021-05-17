@@ -34,7 +34,7 @@ abstract class SceneView : Fragment(), SceneUi, BackButtonListener,
     }
 
     open fun observeLiveData() {
-        viewModel.getBaseEventsLiveData().observe(viewLifecycleOwner, Observer {
+        viewModel.baseEventsLiveData.observe(viewLifecycleOwner, Observer {
             if (it is ViewModelLoading) {
                 displayLoading()
             } else {

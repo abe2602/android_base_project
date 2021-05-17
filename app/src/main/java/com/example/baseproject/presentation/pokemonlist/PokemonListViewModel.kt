@@ -27,21 +27,27 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
     }
 
     fun getFirstPokemonListPage() {
+        baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
+
         getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
             .doOnSuccess {
-                baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
                 pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
             }.doOnError {
                 pokemonListMutableLiveData.postValue(ViewModelError(it))
             }.doFinally {
                 baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
-            }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
+            }
+            .ignoreElement()
+            .onErrorComplete()
+            .subscribe()
+            .addTo(disposables)
     }
 
     fun getPokemonListPage() {
+        newPageLoadingMutableLiveData.postValue(ViewModelLoading<Unit>())
+
         getPokemonListUC.getSingle(GetPokemonListUCParams(limit, offset))
             .doOnSuccess {
-                newPageLoadingMutableLiveData.postValue(ViewModelLoading<Unit>())
                 totalFetchedItems = it.pokemonList.size
                 pokemonListMutableLiveData.postValue(ViewModelSuccess(it))
                 offset = limit
@@ -50,11 +56,14 @@ class PokemonListViewModel @Inject constructor(private var getPokemonListUC: Get
                 newPageLoadingMutableLiveData.postValue(ViewModelError<Unit>(it))
             }.doFinally {
                 newPageLoadingMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
-            }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
+            }
+            .ignoreElement()
+            .onErrorComplete()
+            .subscribe()
+            .addTo(disposables)
     }
 
     fun navigateToPokemonDetails(pokemonName: String) {
         router.navigateTo(PokemonInformationScreen(pokemonName))
     }
-
 }

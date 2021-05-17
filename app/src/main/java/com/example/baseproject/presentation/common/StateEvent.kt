@@ -9,4 +9,5 @@ class ViewModelSuccess<out T>(private val data: T) : StateEvent<T>() {
 class ViewModelError<out T>(error: Throwable) : StateEvent<T>()
 
 class ViewModelLoading<out T> : StateEvent<T>()
+
 class ViewModelDismissLoading<out T> : StateEvent<T>()

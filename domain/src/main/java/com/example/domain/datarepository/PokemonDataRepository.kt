@@ -1,6 +1,5 @@
 package com.example.domain.datarepository
 
-import com.example.domain.model.Pokemon
 import com.example.domain.model.PokemonInformation
 import com.example.domain.model.PokemonList
 import io.reactivex.Completable

@@ -20,11 +20,9 @@ class PokemonInformationViewModel @Inject constructor(
     private val catchPokemonMutableLiveData = MutableLiveData<StateEvent<Unit>>()
     val catchPokemonLiveData: LiveData<StateEvent<Unit>> = catchPokemonMutableLiveData
 
-    init {
-        baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
-    }
-
     fun getPokemonInformation(pokemonName: String) {
+        baseEventsMutableLiveData.postValue(ViewModelLoading<Unit>())
+
         getPokemonInformationUC.getSingle(GetPokemonInformationParamsUC(pokemonName))
             .doOnSuccess { pokemonInformation ->
                 pokemonInformationMutableLiveData.postValue(ViewModelSuccess<PokemonInformation>(pokemonInformation))
@@ -32,14 +30,19 @@ class PokemonInformationViewModel @Inject constructor(
                 pokemonInformationMutableLiveData.postValue(ViewModelError(it))
             }.doFinally {
                 baseEventsMutableLiveData.postValue(ViewModelDismissLoading<Unit>())
-            }.ignoreElement().onErrorComplete().subscribe().addTo(disposables)
+            }
+            .ignoreElement()
+            .onErrorComplete()
+            .subscribe()
+            .addTo(disposables)
     }
 
     fun catchPokemon(pokemonName: String) {
         catchPokemonUC.getCompletable(CatchPokemonParamsUC(pokemonName = pokemonName))
             .doOnComplete {
                 catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
-            }.subscribe()
+            }
+            .subscribe()
             .addTo(disposables)
     }
 
@@ -47,7 +50,8 @@ class PokemonInformationViewModel @Inject constructor(
         releasePokemonUC.getCompletable(ReleasePokemonUCParams(pokemonName = pokemonName))
             .doOnComplete {
                 catchPokemonMutableLiveData.postValue(ViewModelSuccess(Unit))
-            }.subscribe()
+            }
+            .subscribe()
             .addTo(disposables)
     }
 }

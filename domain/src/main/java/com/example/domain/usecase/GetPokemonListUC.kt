@@ -1,7 +1,6 @@
 package com.example.domain.usecase
 
 import com.example.domain.datarepository.PokemonDataRepository
-import com.example.domain.model.Pokemon
 import com.example.domain.model.PokemonList
 import io.reactivex.Scheduler
 import io.reactivex.Single
